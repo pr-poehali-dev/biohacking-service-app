@@ -467,6 +467,49 @@ export default function Index() {
         </div>
       </section>
 
+      {/* ══ QR-КОД ══ */}
+      <section className="py-20 px-5">
+        <div className="max-w-lg mx-auto text-center">
+          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Поделитесь с гостями</p>
+          <h2 className="font-display font-bold uppercase text-white mb-3" style={{ fontSize:"clamp(2rem,5vw,3.5rem)", letterSpacing:"-0.02em" }}>
+            QR-код сайта
+          </h2>
+          <p className="text-white/40 text-sm mb-8">
+            Распечатайте и разместите в бане — гости смогут отсканировать и перейти на страницу с отзывами и чаевыми
+          </p>
+          <Card3D
+            className="rounded-3xl border border-white/8 p-8 inline-flex flex-col items-center gap-6"
+            style={{ background:"hsl(var(--card))" }}
+          >
+            {/* QR via api.qrserver.com — бесплатный, без регистрации */}
+            <div className="p-4 rounded-2xl bg-white">
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=4&color=1a1008&bgcolor=ffffff"
+                alt="QR-код сайта Марии"
+                width={220}
+                height={220}
+                className="block rounded-lg"
+              />
+            </div>
+            <div className="text-center">
+              <div className="font-display font-bold text-white text-lg mb-1">Мария · Пармастер</div>
+              <div className="text-white/35 text-xs font-mono">da18a679-098e-494d-8de1-a558d89808d6.poehali.app</div>
+            </div>
+            <a
+              href="https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=4&color=1a1008&bgcolor=ffffff"
+              download="qr-maria-parmaster.png"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 20px rgba(232,148,60,0.3)" }}
+            >
+              <Icon name="Download" size={18} />
+              Скачать QR-код
+            </a>
+          </Card3D>
+        </div>
+      </section>
+
       {/* ══ FOOTER ══ */}
       <footer id="contact" className="py-16 px-5 border-t border-white/5">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 mb-10">
@@ -564,6 +607,7 @@ export default function Index() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
