@@ -723,9 +723,7 @@ export default function Index() {
             <div>
               <div className="text-white/35 text-xs mb-0.5">Адрес</div>
               <div className="text-white font-medium">Termoland или Любая баня Краснодара</div>
-              <div className="text-white/45 text-sm mt-1 leading-snug">
-                Мария приедет к вам — выберите любую удобную баню в городе, и ритуал парения пройдёт там.
-              </div>
+              <div className="text-white/45 text-sm mt-1 leading-snug">Выберите и арендуйте любую удобную баню в городе, и ритуал парения пройдёт там.</div>
             </div>
           </div>
           <div className="flex items-start gap-3">
