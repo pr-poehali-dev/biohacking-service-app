@@ -47,6 +47,7 @@ const INITIAL_REVIEWS = [
 ];
 
 const TIP_OPTIONS = [300, 500, 1000, 2000];
+const SBP_QR = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/bucket/f8ecef85-20b1-402b-b46a-b5c19a5ad01a.png";
 
 const STEAM_COUNT = 12;
 
@@ -120,6 +121,9 @@ export default function Index() {
   const [tip, setTip] = useState<number | null>(null);
   const [customTip, setCustomTip] = useState("");
   const [navScrolled, setNavScrolled] = useState(false);
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const [showSbpQr, setShowSbpQr] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fn = () => setNavScrolled(window.scrollY > 60);
@@ -260,54 +264,88 @@ export default function Index() {
           <div className="mt-4 h-px w-24 mx-auto" style={{ background:"linear-gradient(to right, transparent, var(--gold), transparent)" }} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {PROGRAMS.map((p, i) => (
-            <Card3D
-              key={p.id}
-              className="rounded-2xl border border-white/6 cursor-pointer animate-slide-up overflow-hidden"
-              style={{ animationDelay:`${i*0.08}s`, background:"hsl(var(--card))" }}
+        {/* карусель */}
+        <div className="relative">
+          {/* стрелки */}
+          <button
+            onClick={()=>setCarouselIdx(i=>Math.max(0,i-1))}
+            disabled={carouselIdx===0}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all disabled:opacity-20 disabled:cursor-default"
+          >
+            <Icon name="ChevronLeft" size={20} />
+          </button>
+          <button
+            onClick={()=>setCarouselIdx(i=>Math.min(PROGRAMS.length-1,i+1))}
+            disabled={carouselIdx===PROGRAMS.length-1}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all disabled:opacity-20 disabled:cursor-default"
+          >
+            <Icon name="ChevronRight" size={20} />
+          </button>
+
+          {/* трек */}
+          <div ref={carouselRef} className="overflow-hidden rounded-3xl">
+            <div
+              className="flex transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+              style={{ transform:`translateX(-${carouselIdx*100}%)` }}
             >
-              <div onClick={()=>setSelected(p)} className="h-full flex flex-col">
-                {/* program image */}
-                <div className="relative h-44 overflow-hidden">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0" style={{ background:"linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, hsl(var(--card)) 100%)" }} />
-                  {/* badge over image */}
-                  {p.badge && (
-                    <div className="absolute top-3 right-3">
-                      <span className="px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm"
-                        style={{ background:"rgba(232,148,60,0.85)", color:"hsl(var(--primary-foreground))" }}>
-                        {p.badge}
-                      </span>
+              {PROGRAMS.map((p)=>(
+                <div key={p.id} className="w-full shrink-0 px-1">
+                  <Card3D
+                    className="rounded-2xl border border-white/6 cursor-pointer overflow-hidden"
+                    style={{ background:"hsl(var(--card))" }}
+                  >
+                    <div onClick={()=>setSelected(p)} className="flex flex-col md:flex-row">
+                      {/* image */}
+                      <div className="relative md:w-80 h-56 md:h-auto overflow-hidden shrink-0">
+                        <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0" style={{ background:"linear-gradient(to bottom, transparent 40%, hsl(var(--card)) 100%)" }} />
+                        <div className="md:hidden absolute inset-0" style={{ background:"linear-gradient(to right, transparent 60%, hsl(var(--card)))" }} />
+                        {p.badge && (
+                          <span className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold"
+                            style={{ background:"rgba(232,148,60,0.9)", color:"hsl(var(--primary-foreground))" }}>
+                            {p.badge}
+                          </span>
+                        )}
+                        <div className="absolute top-4 left-4 text-3xl">{p.emoji}</div>
+                      </div>
+                      {/* content */}
+                      <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
+                        <div className="flex items-center gap-2 mb-1 text-white/40 text-xs">
+                          <Icon name="Clock" size={12}/>{p.duration}
+                        </div>
+                        <h3 className="font-display font-bold text-3xl text-white mb-3">{p.name}</h3>
+                        <p className="text-white/55 leading-relaxed mb-6">{p.short}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="font-display font-black text-3xl text-white">{p.price.toLocaleString()} <span className="text-white/40 text-xl">₽</span></span>
+                          <span className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm"
+                            style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))" }}>
+                            Записаться <Icon name="ArrowRight" size={15}/>
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                  <div className="absolute top-3 left-3 text-2xl">{p.emoji}</div>
-                  {/* duration pill */}
-                  <div className="absolute bottom-3 left-3">
-                    <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-sm"
-                      style={{ background:"rgba(0,0,0,0.55)", color:"rgba(255,255,255,0.75)" }}>
-                      <Icon name="Clock" size={11} /> {p.duration}
-                    </span>
-                  </div>
+                  </Card3D>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-display font-semibold text-xl text-white mb-2">{p.name}</h3>
-                  <p className="text-white/45 text-sm leading-relaxed flex-1 mb-4">{p.short}</p>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-white/6">
-                    <span className="font-display font-bold text-2xl text-white">{p.price.toLocaleString()} ₽</span>
-                    <span className="text-sm font-medium flex items-center gap-1" style={{ color:"var(--gold)" }}>
-                      Подробнее <Icon name="ArrowRight" size={14} />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Card3D>
-          ))}
+          {/* точки-индикаторы */}
+          <div className="flex justify-center gap-2 mt-6">
+            {PROGRAMS.map((_,i)=>(
+              <button key={i} onClick={()=>setCarouselIdx(i)}
+                className="transition-all duration-300 rounded-full"
+                style={{
+                  width: carouselIdx===i ? "28px" : "8px",
+                  height:"8px",
+                  background: carouselIdx===i ? "var(--gold)" : "rgba(255,255,255,0.2)"
+                }}
+              />
+            ))}
+          </div>
         </div>
 
-        <p className="text-center text-white/25 text-xs mt-8">
+        <p className="text-center text-white/25 text-xs mt-6">
           Рассчитано на одного · Необходима предварительная запись · Оплачивается отдельно от билета
         </p>
       </section>
@@ -334,8 +372,8 @@ export default function Index() {
                   <span className="block glow-gold text-3xl font-light tracking-widest">пармастер  · Хилер · Практик</span>
                 </h3>
                 <div className="h-px w-16 my-4" style={{ background:"linear-gradient(to right, var(--gold), transparent)" }} />
-                <p className="text-white/55 leading-relaxed mb-7 text-sm">
-                  Мария — практик живого пара с глубоким пониманием тела и природы. Каждое парение — это индивидуальный ритуал: она чувствует состояние гостя, подбирает веники, травы и температуру так, чтобы тело раскрылось и восстановилось. Приходит не просто банный мастер, а хилер, который работает руками, сердцем и знанием.
+                <p className="text-white/60 leading-relaxed mb-7 text-sm">
+                  Вы когда-нибудь чувствовали, как тело полностью отпускает напряжение? Мария делает именно это — она читает тело как опытный целитель: слышит, где зажато, чувствует, чего не хватает, и создаёт парение, которое работает именно для вас. Живые веники, авторские букеты трав, точно выверенная температура — каждый сеанс это не услуга, а ритуал восстановления, после которого уходят боли, накопленная усталость и стресс. Люди возвращаются снова и снова — потому что это работает.
                 </p>
                 <div className="grid grid-cols-3 gap-3">
                   {[["7+","лет практики"],["3 000+","гостей"],["5.0★","рейтинг"]].map(([v,l])=>(
@@ -454,45 +492,38 @@ export default function Index() {
               onBlur={e=>(e.target.style.borderColor="")}
             />
 
-            {/* реквизиты Сбербанк */}
-            <div className="rounded-2xl p-4 mb-4 text-center" style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(232,148,60,0.2)" }}>
-              <div className="text-white/40 text-xs mb-2 uppercase tracking-widest">Перевод по номеру карты · Сбербанк</div>
-              <div
-                className="font-display font-bold text-2xl tracking-widest text-white mb-1 cursor-pointer select-all"
-                style={{ letterSpacing:"0.12em" }}
-                onClick={() => { navigator.clipboard.writeText("2202208025878902"); toast({ title:"Скопировано! ✓", description:"Номер карты скопирован" }); }}
-              >
-                2202 2080 2587 8902
+            {/* кнопка Сбер */}
+            <a
+              href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip !== null ? tip : Number(customTip) || 300}&trncard=2202208025878902`}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] mb-3"
+              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}
+            >
+              <Icon name="Heart" size={22} />
+              Поблагодарить · Сбербанк
+            </a>
+
+            {/* СБП — кнопка показывает QR */}
+            <button
+              onClick={()=>setShowSbpQr(v=>!v)}
+              className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
+            >
+              <span className="text-xl">⚡</span>
+              {showSbpQr ? "Скрыть QR СБП" : "Оплатить через СБП"}
+            </button>
+
+            {showSbpQr && (
+              <div className="mt-4 flex flex-col items-center gap-3 animate-fade-in">
+                <div className="p-4 rounded-2xl bg-white" style={{ boxShadow:"0 0 30px rgba(232,148,60,0.25)" }}>
+                  <img src={SBP_QR} alt="QR СБП" width={200} height={200} className="block rounded-lg" />
+                </div>
+                <p className="text-white/40 text-sm">Наведите камеру — перевод через любой банк</p>
               </div>
-              <div className="text-white/35 text-xs">Нажмите на номер — скопируется автоматически</div>
-            </div>
+            )}
 
-            {/* кнопки перевода */}
-            <div className="flex flex-col gap-3">
-              <a
-                href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip ?? (customTip || 300)}&trncard=2202208025878902`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-                style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}
-              >
-                <Icon name="Heart" size={22} />
-                Поблагодарить · Сбербанк
-              </a>
-
-              {/* СБП */}
-              <a
-                href={`https://qr.nspk.ru/AS10004RV4OLJ3E5IT40BTMQTCTQK33J?type=01&bank=100000000111&sum=${((tip !== null ? tip : Number(customTip) || 300)) * 100}&cur=RUB&crc=6B7A`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
-              >
-                <span className="text-xl">⚡</span>
-                Перевести через СБП
-              </a>
-            </div>
             <p className="text-white/25 text-xs text-center mt-3">
-              СБП — мгновенный перевод через любой банк по номеру телефона
+              СБП — мгновенный перевод через Тинькофф, ВТБ, Альфа и любой другой банк
             </p>
           </Card3D>
         </div>
