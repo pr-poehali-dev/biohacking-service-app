@@ -4,46 +4,47 @@
 
 @layer base {
   :root {
-    --background: 220 20% 4%;
-    --foreground: 200 20% 95%;
+    --background: 24 30% 6%;
+    --foreground: 36 30% 92%;
 
-    --card: 220 18% 7%;
-    --card-foreground: 200 20% 95%;
+    --card: 24 25% 9%;
+    --card-foreground: 36 30% 92%;
 
-    --popover: 220 18% 7%;
-    --popover-foreground: 200 20% 95%;
+    --popover: 24 25% 9%;
+    --popover-foreground: 36 30% 92%;
 
-    --primary: 185 100% 50%;
-    --primary-foreground: 220 20% 4%;
+    --primary: 32 85% 55%;
+    --primary-foreground: 24 30% 6%;
 
-    --secondary: 220 15% 12%;
-    --secondary-foreground: 200 20% 85%;
+    --secondary: 24 20% 14%;
+    --secondary-foreground: 36 25% 85%;
 
-    --muted: 220 15% 12%;
-    --muted-foreground: 200 10% 55%;
+    --muted: 24 18% 14%;
+    --muted-foreground: 33 14% 58%;
 
-    --accent: 185 100% 50%;
-    --accent-foreground: 220 20% 4%;
+    --accent: 32 85% 55%;
+    --accent-foreground: 24 30% 6%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 14%;
-    --input: 220 15% 12%;
-    --ring: 185 100% 50%;
+    --border: 28 20% 16%;
+    --input: 28 18% 14%;
+    --ring: 32 85% 55%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 220 20% 4%;
-    --sidebar-foreground: 200 20% 95%;
-    --sidebar-primary: 185 100% 50%;
-    --sidebar-primary-foreground: 220 20% 4%;
-    --sidebar-accent: 220 15% 12%;
-    --sidebar-accent-foreground: 200 20% 85%;
-    --sidebar-border: 220 15% 14%;
-    --sidebar-ring: 185 100% 50%;
+    --sidebar-background: 24 30% 6%;
+    --sidebar-foreground: 36 30% 92%;
+    --sidebar-primary: 32 85% 55%;
+    --sidebar-primary-foreground: 24 30% 6%;
+    --sidebar-accent: 24 20% 14%;
+    --sidebar-accent-foreground: 36 25% 85%;
+    --sidebar-border: 28 20% 16%;
+    --sidebar-ring: 32 85% 55%;
 
-    --cyan-glow: rgba(0, 230, 220, 0.15);
+    --amber: 32 85% 55%;
+    --amber-glow: rgba(228, 150, 60, 0.18);
   }
 }
 
@@ -68,13 +69,17 @@
   h4,
   h5,
   h6 {
-    font-family: "Exo 2", sans-serif;
+    font-family: "Oswald", sans-serif;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: "Exo 2", sans-serif;
+    font-family: "Oswald", sans-serif;
+  }
+
+  .font-script {
+    font-family: "Caveat", cursive;
   }
 
   .glass {
@@ -83,11 +88,18 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .grid-bg {
+  .ember-bg {
     background-image:
-      linear-gradient(rgba(0, 230, 220, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 230, 220, 0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
+      radial-gradient(
+        circle at 20% 30%,
+        rgba(228, 150, 60, 0.06),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 80% 70%,
+        rgba(200, 90, 40, 0.05),
+        transparent 40%
+      );
   }
 
   .hover-glow {
@@ -96,9 +108,9 @@
 
   .hover-glow:hover {
     box-shadow:
-      0 0 30px var(--cyan-glow),
-      0 0 80px var(--cyan-glow);
-    border-color: rgba(0, 230, 220, 0.35) !important;
+      0 0 30px var(--amber-glow),
+      0 0 80px var(--amber-glow);
+    border-color: rgba(228, 150, 60, 0.35) !important;
     transform: translateY(-3px);
   }
 
@@ -111,11 +123,11 @@
   }
 
   .animate-float {
-    animation: float 4s ease-in-out infinite;
+    animation: float 5s ease-in-out infinite;
   }
 
   .glow-text {
-    text-shadow: 0 0 30px rgba(0, 230, 220, 0.5);
+    text-shadow: 0 0 30px rgba(228, 150, 60, 0.5);
   }
 }
 

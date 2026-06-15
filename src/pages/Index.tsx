@@ -1,762 +1,474 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
+import { useToast } from "@/hooks/use-toast";
 
-const SERVICES = [
+const HERO_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/224c221f-f9c1-474b-8796-99606cc638ca.jpg";
+const MASTER_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/13e1e8ee-1d8e-4cdd-afa7-3ee82fb4d022.jpg";
+
+const PROGRAMS = [
   {
     id: 1,
-    name: "Криокапсула",
-    emoji: "❄️",
-    tagline: "Сброс до заводских настроек",
-    description: "3 минуты при −140°C запускают каскад восстановительных реакций. Уходит воспаление, боль, усталость. Тело выходит обновлённым.",
-    benefits: ["Снятие воспаления", "Ускорение восстановления", "Выброс эндорфинов", "Улучшение сна"],
-    duration: "3 мин",
-    price: 2500,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/b65289a8-c81b-4290-902a-8bfa68989027.jpg",
-    color: "from-blue-900/40 to-cyan-900/20",
-    accent: "#00E6DC",
+    name: "Фирменный пар",
+    duration: "50 мин",
+    price: 6200,
+    badge: "Премиум",
+    short: "Согревающее парение в два захода с тёплыми припарками, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником.",
+    full: "Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом.",
   },
   {
     id: 2,
-    name: "Парение в бане",
-    emoji: "🌿",
-    tagline: "Древний биохак. Работает.",
-    description: "Берёзовый веник, печь на дровах, правильный пар. Глубокая детоксикация, расслабление мышц, перезагрузка нервной системы.",
-    benefits: ["Детоксикация", "Расслабление мышц", "Очищение кожи", "Антистресс"],
-    duration: "60 мин",
-    price: 3500,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/da49b1e8-d2aa-4112-bf48-ce699f97f789.jpg",
-    color: "from-orange-900/30 to-amber-900/20",
-    accent: "#F59E0B",
+    name: "Цитрусовое парение",
+    duration: "35 мин",
+    price: 3900,
+    badge: null,
+    short: "Будоражащее сознание сочетание прохладной пихты и сочного цитруса, могучий дуб для тела и завершающий пилинг сочным цитрусом.",
+    full: "Приготовьтесь к будоражащему ваше сознание сочетанию прохладной пихты и сочного цитруса, а могучий дуб не оставит ваше тело равнодушным. В завершение процедуры лёгкий пилинг сочным цитрусом дополнит ваш купаж впечатлений ощущением наполненности и настоящего расслабления.",
   },
   {
     id: 3,
-    name: "Массаж",
-    emoji: "🤲",
-    tagline: "Умные руки — умное тело",
-    description: "Глубокотканный массаж от специалиста с медицинским образованием. Работа с триггерными точками, восстановление подвижности суставов.",
-    benefits: ["Снятие зажимов", "Улучшение циркуляции", "Работа с триггерами", "Восстановление"],
-    duration: "60 мин",
-    price: 4500,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/8351ea4d-ca30-4ae0-95f2-d1a5eb987699.jpg",
-    color: "from-purple-900/30 to-violet-900/20",
-    accent: "#A78BFA",
+    name: "Бодрящее парение",
+    duration: "35 мин",
+    price: 3700,
+    badge: "Хит",
+    short: "Авторская программа с хвойным букетом живой пихты — путешествие в прохладу северной тайги, мощный прилив сил и оздоровление дыхательных путей.",
+    full: "Авторская программа «Бодрящее парение» создана для тех, кто хочет сбросить груз повседневных забот и почувствовать мощный прилив сил. Главную роль играет хвойный букет: аромат живой пихты переносит в прохладу северной тайги, очищая мысли. Включает парение всего тела, ароматерапию ледяной пихтой, выход на контраст, чаепитие и догрев. Оздоровление дыхательных путей, улучшение состояния кожи, снятие стресса и повышение жизненного тонуса.",
   },
   {
     id: 4,
-    name: "Капельница",
-    emoji: "💧",
-    tagline: "Прямо в кровь. Никаких потерь.",
-    description: "100% биодоступность витаминов и нутриентов. Индивидуальные составы: энергия, иммунитет, антиоксиданты, восстановление после нагрузок.",
-    benefits: ["100% усвоение", "Быстрый эффект", "Индивидуальный состав", "Иммунитет"],
-    duration: "45 мин",
-    price: 6000,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/062991f0-346a-426d-a7cf-97d11ebf6f9d.jpg",
-    color: "from-cyan-900/30 to-teal-900/20",
-    accent: "#06B6D4",
+    name: "Знахарь",
+    duration: "20 мин",
+    price: 3200,
+    badge: null,
+    short: "Эвкалипт — лучший помощник для иммунитета! Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта.",
+    full: "Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта.",
   },
   {
     id: 5,
-    name: "Хот-пилатес",
-    emoji: "🔥",
-    tagline: "Гибкость × Сила × Жара",
-    description: "Пилатес при 38°C. Мышцы прогреваются глубже, гибкость растёт в разы быстрее, жиросжигание усиливается. Тело меняется после первого сеанса.",
-    benefits: ["Глубокая проработка", "Жиросжигание", "+300% к гибкости", "Детокс через пот"],
-    duration: "50 мин",
-    price: 2800,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/f9f03296-57ab-44bb-9b55-008108b1dcab.jpg",
-    color: "from-red-900/30 to-orange-900/20",
-    accent: "#F97316",
+    name: "Традиционное парение",
+    duration: "25 мин",
+    price: 3200,
+    badge: null,
+    short: "Тёплый пар и нежная берёза окутывают тело. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой.",
+    full: "Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой.",
   },
   {
     id: 6,
-    name: "Медитация на природе",
-    emoji: "🌲",
-    tagline: "Перезагрузка для разума",
-    description: "Практики осознанности в лесу под руководством инструктора. Снижение кортизола, активация парасимпатики, выход из хронического стресса.",
-    benefits: ["Снижение кортизола", "Ясность ума", "Выход из стресса", "Энергия"],
-    duration: "90 мин",
-    price: 3000,
-    image: "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/dea1b7a5-3af0-4743-8161-17d3afadb0a5.jpg",
-    color: "from-green-900/30 to-emerald-900/20",
-    accent: "#34D399",
+    name: "Парение дубовыми вениками",
+    duration: "15 мин",
+    price: 2500,
+    badge: "Классика",
+    short: "Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
+    full: "Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика.",
+  },
+  {
+    id: 7,
+    name: "Мёд и травы",
+    duration: "20 мин",
+    price: 2800,
+    badge: null,
+    short: "Глубокое парение, ароматерапия луговыми травами и скрабирование натуральным мёдом — кожа становится бархатистой и напитанной.",
+    full: "Уникальное сочетание традиций и природной силы. Глубокое парение подготавливает тело, в воздухе разливается благоухание луговых трав, а тёплый мёд создаёт атмосферу комфорта. Скрабирование натуральным мёдом удаляет ороговевшие клетки, делая кожу бархатистой и напитанной. Очищение и детокс, уход за кожей, релакс и укрепление иммунитета.",
+  },
+  {
+    id: 8,
+    name: "Детское парение",
+    duration: "10 мин",
+    price: 1200,
+    badge: "До 12 лет",
+    short: "Мягкий и лёгкий ритуал для детей: лёгкое парение дубовым и пихтовым вениками, ароматерапия и забота опытного пармастера.",
+    full: "Специальный мягкий ритуал для детей до 12 лет. Опытный пармастер бережно проведёт ребёнка в мир аромата и тепла. Лёгкое парение вениками (дубовым и пихтовым) безопасно для детей, ароматерапия и расслабление в парной зоне. Активизирует кровообращение, укрепляет иммунитет, улучшает сон и общий тонус организма.",
   },
 ];
 
-type Section = "catalog" | "about" | "contacts" | "profile";
+const INITIAL_REVIEWS = [
+  { id: 1, name: "Алексей", rating: 5, text: "Фирменный пар — это что-то невероятное! Вышел будто заново родился. Мастер — золотые руки.", date: "12 июня" },
+  { id: 2, name: "Марина", rating: 5, text: "Брала цитрусовое парение, аромат держался ещё пару дней. Кожа мягкая, настроение на высоте.", date: "8 июня" },
+  { id: 3, name: "Дмитрий", rating: 5, text: "Хожу на бодрящее парение каждую неделю. Лучшая перезагрузка после рабочих будней.", date: "3 июня" },
+];
+
+const TIP_OPTIONS = [300, 500, 1000, 2000];
 
 export default function Index() {
-  const [cart, setCart] = useState<typeof SERVICES>([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<Section>("catalog");
-  const [selectedService, setSelectedService] = useState<(typeof SERVICES)[0] | null>(null);
-  const [profileTab, setProfileTab] = useState<"orders" | "settings">("orders");
+  const { toast } = useToast();
+  const [selected, setSelected] = useState<(typeof PROGRAMS)[0] | null>(null);
+  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
+  const [revName, setRevName] = useState("");
+  const [revText, setRevText] = useState("");
+  const [revRating, setRevRating] = useState(5);
+  const [tip, setTip] = useState<number | null>(null);
+  const [customTip, setCustomTip] = useState("");
 
-  const addToCart = (service: (typeof SERVICES)[0]) => {
-    if (!cart.find((s) => s.id === service.id)) {
-      setCart([...cart, service]);
+  const submitReview = () => {
+    if (!revName.trim() || !revText.trim()) {
+      toast({ title: "Заполните имя и отзыв", variant: "destructive" });
+      return;
     }
+    setReviews([
+      { id: Date.now(), name: revName, rating: revRating, text: revText, date: "сегодня" },
+      ...reviews,
+    ]);
+    setRevName("");
+    setRevText("");
+    setRevRating(5);
+    toast({ title: "Спасибо за отзыв! 🌿", description: "Ваш отзыв опубликован" });
   };
-  const removeFromCart = (id: number) => setCart(cart.filter((s) => s.id !== id));
-  const total = cart.reduce((sum, s) => sum + s.price, 0);
+
+  const sendTip = () => {
+    const amount = tip ?? Number(customTip);
+    if (!amount || amount < 1) {
+      toast({ title: "Выберите сумму чаевых", variant: "destructive" });
+      return;
+    }
+    toast({ title: `Спасибо за чаевые ${amount.toLocaleString()} ₽! 🙏`, description: "Пармастер благодарит вас" });
+    setTip(null);
+    setCustomTip("");
+  };
+
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className="min-h-screen bg-background grid-bg relative">
-      {/* Ambient glow top */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(0,230,220,0.08),transparent_70%)] pointer-events-none z-0" />
-
+    <div className="min-h-screen bg-background ember-bg relative overflow-x-hidden">
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-          <button
-            onClick={() => setActiveSection("catalog")}
-            className="font-display font-black text-xl tracking-widest uppercase"
-          >
-            <span className="text-white">RE</span>
-            <span style={{ color: "#00E6DC" }}>GEN</span>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+          <button onClick={() => scrollTo("top")} className="font-display font-bold text-lg uppercase tracking-wide">
+            <span className="text-white">Парм</span>
+            <span style={{ color: "hsl(var(--amber))" }}>астер</span>
           </button>
-
           <div className="hidden md:flex items-center gap-1">
-            {(["catalog", "about", "contacts"] as Section[]).map((sec) => (
+            {[
+              { id: "programs", label: "Программы" },
+              { id: "reviews", label: "Отзывы" },
+              { id: "tips", label: "Чаевые" },
+              { id: "contact", label: "Контакты" },
+            ].map((l) => (
               <button
-                key={sec}
-                onClick={() => setActiveSection(sec)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  activeSection === sec
-                    ? "text-[#00E6DC] bg-[rgba(0,230,220,0.08)]"
-                    : "text-white/50 hover:text-white/80"
-                }`}
+                key={l.id}
+                onClick={() => scrollTo(l.id)}
+                className="px-4 py-2 rounded-lg text-sm font-medium text-white/55 hover:text-[hsl(var(--amber))] transition-colors"
               >
-                {sec === "catalog" && "Услуги"}
-                {sec === "about" && "О нас"}
-                {sec === "contacts" && "Контакты"}
+                {l.label}
               </button>
             ))}
           </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActiveSection("profile")}
-              className={`p-2 rounded-lg transition-all duration-200 ${
-                activeSection === "profile"
-                  ? "text-[#00E6DC] bg-[rgba(0,230,220,0.1)]"
-                  : "text-white/50 hover:text-white/80"
-              }`}
-            >
-              <Icon name="User" size={20} />
-            </button>
-
-            <button
-              onClick={() => setCartOpen(true)}
-              className="relative p-2 rounded-lg text-white/50 hover:text-[#00E6DC] transition-all duration-200"
-            >
-              <Icon name="ShoppingBag" size={20} />
-              {cart.length > 0 && (
-                <span
-                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-[#050c0f]"
-                  style={{ background: "#00E6DC" }}
-                >
-                  {cart.length}
-                </span>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile nav */}
-        <div className="md:hidden flex border-t border-white/5">
-          {(["catalog", "about", "contacts"] as Section[]).map((sec) => (
-            <button
-              key={sec}
-              onClick={() => setActiveSection(sec)}
-              className={`flex-1 py-2 text-xs font-medium transition-colors ${
-                activeSection === sec ? "text-[#00E6DC]" : "text-white/40"
-              }`}
-            >
-              {sec === "catalog" && "Услуги"}
-              {sec === "about" && "О нас"}
-              {sec === "contacts" && "Контакты"}
-            </button>
-          ))}
+          <button
+            onClick={() => scrollTo("programs")}
+            className="px-4 py-2 rounded-lg text-sm font-bold text-[hsl(var(--primary-foreground))]"
+            style={{ background: "hsl(var(--amber))" }}
+          >
+            Записаться
+          </button>
         </div>
       </nav>
 
-      {/* MAIN CONTENT */}
-      <main className="pt-20 md:pt-16 relative z-10">
-
-        {/* ===== CATALOG ===== */}
-        {activeSection === "catalog" && (
-          <div>
-            {/* Hero */}
-            <section className="relative overflow-hidden py-16 md:py-24 px-4">
-              <div className="max-w-4xl mx-auto text-center animate-fade-in">
-                <div
-                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-6 border"
-                  style={{ borderColor: "rgba(0,230,220,0.3)", color: "#00E6DC", background: "rgba(0,230,220,0.05)" }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E6DC] animate-pulse" />
-                  Биохакинг-центр · Краснодар
-                </div>
-                <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl uppercase leading-none mb-6">
-                  <span className="text-white">Взломай</span>
-                  <br />
-                  <span className="glow-text" style={{ color: "#00E6DC" }}>потенциал</span>
-                  <br />
-                  <span className="text-white/30">тела</span>
-                </h1>
-                <p className="text-white/50 text-lg md:text-xl max-w-xl mx-auto leading-relaxed mb-8">
-                  Научно обоснованные методы восстановления и оптимизации. Выбери свой протокол.
-                </p>
-                <button
-                  onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
-                  className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-[#050c0f] transition-all duration-300 hover:scale-105"
-                  style={{ background: "#00E6DC", boxShadow: "0 0 30px rgba(0,230,220,0.3)" }}
-                >
-                  Выбрать услугу
-                  <Icon name="ArrowDown" size={18} />
-                </button>
-              </div>
-
-              {/* Stats */}
-              <div className="max-w-3xl mx-auto mt-16 grid grid-cols-3 gap-4">
-                {[
-                  { value: "6", label: "процедур" },
-                  { value: "2 000+", label: "клиентов" },
-                  { value: "98%", label: "возвращаются" },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center glass rounded-2xl py-5 px-2">
-                    <div className="font-display font-black text-2xl md:text-3xl" style={{ color: "#00E6DC" }}>
-                      {stat.value}
-                    </div>
-                    <div className="text-white/40 text-xs mt-1">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Services grid */}
-            <section id="services" className="px-4 pb-24 max-w-7xl mx-auto">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="font-display font-bold text-2xl md:text-3xl text-white">
-                  Протоколы восстановления
-                </h2>
-                {cart.length > 0 && (
-                  <button
-                    onClick={() => setCartOpen(true)}
-                    className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl border transition-all"
-                    style={{ borderColor: "rgba(0,230,220,0.3)", color: "#00E6DC" }}
-                  >
-                    <Icon name="ShoppingBag" size={16} />
-                    {cart.length} выбрано · {total.toLocaleString()} ₽
-                  </button>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {SERVICES.map((service, i) => {
-                  const inCart = !!cart.find((s) => s.id === service.id);
-                  return (
-                    <div
-                      key={service.id}
-                      className="rounded-2xl overflow-hidden border border-white/5 hover-glow cursor-pointer group animate-slide-up"
-                      style={{ animationDelay: `${i * 0.1}s`, background: "hsl(var(--card))" }}
-                      onClick={() => setSelectedService(service)}
-                    >
-                      {/* Image */}
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={service.image}
-                          alt={service.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className={`absolute inset-0 bg-gradient-to-t ${service.color} to-transparent`} />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--card))] via-transparent to-transparent" />
-                        <div className="absolute top-3 right-3">
-                          <span
-                            className="px-3 py-1 rounded-full text-xs font-bold"
-                            style={{ background: "rgba(0,0,0,0.5)", color: service.accent, border: `1px solid ${service.accent}40` }}
-                          >
-                            {service.duration}
-                          </span>
-                        </div>
-                        <div className="absolute top-3 left-3 text-2xl">{service.emoji}</div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-5">
-                        <div className="text-white/40 text-xs uppercase tracking-widest mb-1">{service.tagline}</div>
-                        <h3 className="font-display font-bold text-xl text-white mb-2">{service.name}</h3>
-                        <p className="text-white/50 text-sm leading-relaxed mb-4 line-clamp-2">{service.description}</p>
-
-                        {/* Benefits */}
-                        <div className="flex flex-wrap gap-1.5 mb-5">
-                          {service.benefits.slice(0, 3).map((b) => (
-                            <span
-                              key={b}
-                              className="px-2 py-0.5 rounded-md text-xs"
-                              style={{ background: `${service.accent}15`, color: service.accent }}
-                            >
-                              {b}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Price + CTA */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="font-display font-black text-2xl text-white">
-                              {service.price.toLocaleString()}
-                            </span>
-                            <span className="text-white/40 text-sm ml-1">₽</span>
-                          </div>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); addToCart(service); }}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 ${
-                              inCart
-                                ? "text-white/40 border border-white/10 cursor-default"
-                                : "text-[#050c0f] hover:scale-105 hover:shadow-lg"
-                            }`}
-                            style={
-                              inCart
-                                ? {}
-                                : { background: service.accent, boxShadow: `0 0 20px ${service.accent}40` }
-                            }
-                          >
-                            {inCart ? (
-                              <>
-                                <Icon name="Check" size={16} />
-                                Добавлено
-                              </>
-                            ) : (
-                              <>
-                                <Icon name="Plus" size={16} />
-                                Записаться
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* ===== ABOUT ===== */}
-        {activeSection === "about" && (
-          <section className="min-h-screen px-4 py-16 max-w-5xl mx-auto animate-fade-in">
-            <div className="mb-12">
-              <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-6 border"
-                style={{ borderColor: "rgba(0,230,220,0.3)", color: "#00E6DC", background: "rgba(0,230,220,0.05)" }}
-              >
-                О компании
-              </div>
-              <h2 className="font-display font-black text-4xl md:text-6xl uppercase text-white mb-6">
-                Мы превращаем<br />
-                <span className="glow-text" style={{ color: "#00E6DC" }}>науку в практику</span>
-              </h2>
-              <p className="text-white/50 text-lg max-w-2xl leading-relaxed">
-                REGEN — биохакинг-центр нового поколения. Мы объединили древние практики восстановления с современными технологиями, чтобы дать телу и разуму максимум возможностей.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {[
-                {
-                  icon: "Zap",
-                  title: "Доказательный подход",
-                  text: "Только методы с научно подтверждённой эффективностью. Никакой эзотерики — только физиология.",
-                },
-                {
-                  icon: "Shield",
-                  title: "Медицинская безопасность",
-                  text: "Все процедуры проводят специалисты с медицинским образованием. Перед записью — консультация.",
-                },
-                {
-                  icon: "Target",
-                  title: "Персональные протоколы",
-                  text: "Подбираем программу под ваши цели: восстановление, продуктивность, спорт, антивозрастной эффект.",
-                },
-                {
-                  icon: "TrendingUp",
-                  title: "Измеримый результат",
-                  text: "Отслеживаем биомаркеры до и после. Видите прогресс в цифрах, а не ощущениях.",
-                },
-              ].map((item) => (
-                <div key={item.title} className="glass rounded-2xl p-6 hover-glow border border-white/5">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                    style={{ background: "rgba(0,230,220,0.1)" }}
-                  >
-                    <Icon name={item.icon as "Zap"} size={22} className="text-[#00E6DC]" />
-                  </div>
-                  <h3 className="font-display font-bold text-lg text-white mb-2">{item.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{item.text}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="glass rounded-2xl p-8 border border-white/5 flex flex-col md:flex-row items-center gap-8">
-              <div className="flex-1">
-                <h3 className="font-display font-bold text-2xl text-white mb-3">Наша команда</h3>
-                <p className="text-white/50 leading-relaxed">
-                  Врачи, спортивные физиологи, нутрициологи и инструкторы с международными сертификатами. Средний опыт — 8 лет в wellness-индустрии.
-                </p>
-              </div>
-              <div className="grid grid-cols-3 gap-3 shrink-0">
-                {["👨‍⚕️", "👩‍⚕️", "🧬"].map((emoji, i) => (
-                  <div key={i} className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl">
-                    {emoji}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ===== CONTACTS ===== */}
-        {activeSection === "contacts" && (
-          <section className="min-h-screen px-4 py-16 max-w-3xl mx-auto animate-fade-in">
+      {/* HERO */}
+      <header id="top" className="relative min-h-screen flex items-center pt-16">
+        <div className="absolute inset-0">
+          <img src={HERO_IMG} alt="Парение" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
+        </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full">
+          <div className="max-w-2xl animate-fade-in">
             <div
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-6 border"
-              style={{ borderColor: "rgba(0,230,220,0.3)", color: "#00E6DC", background: "rgba(0,230,220,0.05)" }}
+              style={{ borderColor: "rgba(228,150,60,0.35)", color: "hsl(var(--amber))", background: "rgba(228,150,60,0.07)" }}
             >
-              Контакты и поддержка
+              <Icon name="MapPin" size={13} />
+              Termoland · Краснодар
             </div>
-            <h2 className="font-display font-black text-4xl md:text-5xl uppercase text-white mb-10">
-              Свяжитесь с нами
-            </h2>
-
-            <div className="space-y-4 mb-10">
-              {[
-                { icon: "MapPin", label: "Адрес", value: "Краснодар, ул. Красная, 83" },
-                { icon: "Phone", label: "Телефон", value: "+7 (861) 000-00-00" },
-                { icon: "Mail", label: "Email", value: "hello@regen.center" },
-                { icon: "Clock", label: "Режим работы", value: "Ежедневно 8:00 – 22:00" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="glass rounded-2xl p-5 border border-white/5 flex items-center gap-5 hover-glow"
-                >
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(0,230,220,0.1)" }}
-                  >
-                    <Icon name={item.icon as "MapPin"} size={20} className="text-[#00E6DC]" />
-                  </div>
-                  <div>
-                    <div className="text-white/40 text-xs">{item.label}</div>
-                    <div className="text-white font-medium">{item.value}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Contact form */}
-            <div className="glass rounded-2xl p-6 border border-white/5">
-              <h3 className="font-display font-bold text-xl text-white mb-5">Написать нам</h3>
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Ваше имя"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#00E6DC] transition-colors"
-                />
-                <input
-                  type="tel"
-                  placeholder="Телефон"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#00E6DC] transition-colors"
-                />
-                <textarea
-                  placeholder="Сообщение"
-                  rows={4}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#00E6DC] transition-colors resize-none"
-                />
-                <button
-                  className="w-full py-3.5 rounded-xl font-bold text-[#050c0f] transition-all duration-200 hover:scale-[1.02]"
-                  style={{ background: "#00E6DC", boxShadow: "0 0 20px rgba(0,230,220,0.25)" }}
-                >
-                  Отправить сообщение
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ===== PROFILE ===== */}
-        {activeSection === "profile" && (
-          <section className="min-h-screen px-4 py-16 max-w-3xl mx-auto animate-fade-in">
-            {/* Header */}
-            <div className="glass rounded-2xl p-6 border border-white/5 mb-6">
-              <div className="flex items-center gap-5">
-                <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-black shrink-0"
-                  style={{ background: "rgba(0,230,220,0.15)", color: "#00E6DC" }}
-                >
-                  АИ
-                </div>
-                <div>
-                  <h2 className="font-display font-bold text-xl text-white">Александр Иванов</h2>
-                  <p className="text-white/40 text-sm">Клиент с мая 2024</p>
-                  <div
-                    className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium"
-                    style={{ background: "rgba(0,230,220,0.1)", color: "#00E6DC" }}
-                  >
-                    <Icon name="Star" size={12} />
-                    Премиум-участник
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="flex gap-2 mb-6">
-              {[
-                { key: "orders", label: "Мои записи" },
-                { key: "settings", label: "Настройки" },
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setProfileTab(tab.key as "orders" | "settings")}
-                  className={`flex-1 py-3 rounded-xl font-medium text-sm transition-all ${
-                    profileTab === tab.key
-                      ? "text-[#050c0f] font-bold"
-                      : "text-white/40 bg-white/5 hover:text-white/70"
-                  }`}
-                  style={profileTab === tab.key ? { background: "#00E6DC" } : {}}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {profileTab === "orders" && (
-              <div className="space-y-3">
-                {[
-                  { service: "Криокапсула", date: "10 апр 2026", status: "Завершено", emoji: "❄️" },
-                  { service: "Массаж", date: "5 апр 2026", status: "Завершено", emoji: "🤲" },
-                  { service: "Медитация на природе", date: "18 апр 2026", status: "Предстоит", emoji: "🌲" },
-                ].map((order) => (
-                  <div
-                    key={order.service + order.date}
-                    className="glass rounded-2xl p-4 border border-white/5 flex items-center gap-4"
-                  >
-                    <div className="text-2xl">{order.emoji}</div>
-                    <div className="flex-1">
-                      <div className="font-medium text-white text-sm">{order.service}</div>
-                      <div className="text-white/40 text-xs mt-0.5">{order.date}</div>
-                    </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === "Завершено"
-                          ? "bg-white/5 text-white/40"
-                          : ""
-                      }`}
-                      style={order.status === "Предстоит" ? { background: "rgba(0,230,220,0.1)", color: "#00E6DC" } : {}}
-                    >
-                      {order.status}
-                    </span>
-                  </div>
-                ))}
-                <button
-                  onClick={() => setActiveSection("catalog")}
-                  className="w-full py-3.5 rounded-xl font-bold text-[#050c0f] mt-2 transition-all hover:scale-[1.02]"
-                  style={{ background: "#00E6DC" }}
-                >
-                  Записаться снова
-                </button>
-              </div>
-            )}
-
-            {profileTab === "settings" && (
-              <div className="space-y-4">
-                {[
-                  { label: "Имя", value: "Александр Иванов" },
-                  { label: "Телефон", value: "+7 (900) 000-00-00" },
-                  { label: "Email", value: "alex@example.com" },
-                ].map((field) => (
-                  <div key={field.label}>
-                    <label className="text-white/40 text-xs mb-1.5 block">{field.label}</label>
-                    <input
-                      defaultValue={field.value}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00E6DC] transition-colors"
-                    />
-                  </div>
-                ))}
-                <button
-                  className="w-full py-3.5 rounded-xl font-bold text-[#050c0f] mt-2"
-                  style={{ background: "#00E6DC" }}
-                >
-                  Сохранить изменения
-                </button>
-              </div>
-            )}
-          </section>
-        )}
-      </main>
-
-      {/* ===== SERVICE MODAL ===== */}
-      {selectedService && (
-        <div
-          className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4"
-          onClick={() => setSelectedService(null)}
-        >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-          <div
-            className="relative w-full md:max-w-xl max-h-[90vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/5 animate-slide-up"
-            style={{ background: "hsl(var(--card))" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative h-56 md:h-64 overflow-hidden rounded-t-3xl md:rounded-t-2xl">
-              <img
-                src={selectedService.image}
-                alt={selectedService.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--card))] via-transparent" />
+            <h1 className="font-display font-bold text-5xl md:text-7xl uppercase leading-[0.95] mb-6 text-white">
+              Искусство
+              <br />
+              <span className="glow-text" style={{ color: "hsl(var(--amber))" }}>живого пара</span>
+            </h1>
+            <p className="font-script text-2xl md:text-3xl text-white/70 mb-3">
+              Авторские программы парения
+            </p>
+            <p className="text-white/55 text-lg leading-relaxed mb-8 max-w-lg">
+              8 уникальных ритуалов: от бодрящей хвои до медового скрабирования. Дубовые и берёзовые веники, луговые травы, забота мастера.
+            </p>
+            <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => setSelectedService(null)}
-                className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/50 flex items-center justify-center text-white/70 hover:text-white"
+                onClick={() => scrollTo("programs")}
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-105"
+                style={{ background: "hsl(var(--amber))", boxShadow: "0 0 30px rgba(228,150,60,0.3)" }}
               >
-                <Icon name="X" size={18} />
+                Выбрать программу
+                <Icon name="ArrowDown" size={18} />
               </button>
-              <div className="absolute bottom-4 left-5 text-3xl">{selectedService.emoji}</div>
-            </div>
-
-            <div className="p-6">
-              <div className="text-white/40 text-xs uppercase tracking-widest mb-1">{selectedService.tagline}</div>
-              <h2 className="font-display font-black text-3xl text-white mb-3">{selectedService.name}</h2>
-              <p className="text-white/60 leading-relaxed mb-6">{selectedService.description}</p>
-
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {selectedService.benefits.map((b) => (
-                  <div
-                    key={b}
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm"
-                    style={{ background: `${selectedService.accent}10`, color: selectedService.accent }}
-                  >
-                    <Icon name="CheckCircle" size={14} />
-                    {b}
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                <div>
-                  <div className="text-white/40 text-xs">Стоимость</div>
-                  <div className="font-display font-black text-3xl text-white">
-                    {selectedService.price.toLocaleString()} <span className="text-white/40 text-lg">₽</span>
-                  </div>
-                  <div className="text-white/40 text-xs">{selectedService.duration}</div>
-                </div>
-                <button
-                  onClick={() => { addToCart(selectedService); setSelectedService(null); }}
-                  disabled={!!cart.find((s) => s.id === selectedService.id)}
-                  className="px-8 py-3.5 rounded-xl font-bold text-[#050c0f] transition-all duration-200 hover:scale-105 disabled:opacity-40 disabled:cursor-default disabled:scale-100"
-                  style={{ background: selectedService.accent, boxShadow: `0 0 20px ${selectedService.accent}40` }}
-                >
-                  {cart.find((s) => s.id === selectedService.id) ? "Уже добавлено" : "Записаться"}
-                </button>
-              </div>
+              <button
+                onClick={() => scrollTo("tips")}
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-white glass border border-white/10 hover:border-[hsl(var(--amber))] transition-all"
+              >
+                <Icon name="Heart" size={18} />
+                Чаевые мастеру
+              </button>
             </div>
           </div>
         </div>
-      )}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/30 animate-float">
+          <Icon name="ChevronDown" size={26} />
+        </div>
+      </header>
 
-      {/* ===== CART DRAWER ===== */}
-      {cartOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-end md:items-end justify-end"
-          onClick={() => setCartOpen(false)}
-        >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      {/* PROGRAMS */}
+      <section id="programs" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="font-script text-2xl mb-2" style={{ color: "hsl(var(--amber))" }}>8 вариантов парения</div>
+          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white">Программы</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {PROGRAMS.map((p, i) => (
+            <div
+              key={p.id}
+              className="rounded-2xl border border-white/5 p-6 hover-glow cursor-pointer animate-slide-up flex flex-col"
+              style={{ animationDelay: `${i * 0.06}s`, background: "hsl(var(--card))" }}
+              onClick={() => setSelected(p)}
+            >
+              <div className="flex items-start justify-between mb-3 gap-3">
+                <h3 className="font-display font-semibold text-2xl text-white">{p.name}</h3>
+                {p.badge && (
+                  <span
+                    className="px-3 py-1 rounded-full text-xs font-bold shrink-0"
+                    style={{ background: "rgba(228,150,60,0.12)", color: "hsl(var(--amber))" }}
+                  >
+                    {p.badge}
+                  </span>
+                )}
+              </div>
+              <p className="text-white/50 text-sm leading-relaxed mb-5 flex-1">{p.short}</p>
+              <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="flex items-center gap-2 text-white/45 text-sm">
+                  <Icon name="Clock" size={15} />
+                  {p.duration}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="font-display font-bold text-2xl text-white">{p.price.toLocaleString()} ₽</span>
+                  <span className="text-[hsl(var(--amber))] text-sm font-medium flex items-center gap-1">
+                    Подробнее <Icon name="ArrowRight" size={14} />
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-white/30 text-sm mt-8">
+          Парение рассчитано на одного человека · Необходима предварительная запись · Не входит в стоимость билета
+        </p>
+      </section>
+
+      {/* MASTER */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto glass rounded-3xl border border-white/5 overflow-hidden grid md:grid-cols-2">
+          <div className="h-72 md:h-auto">
+            <img src={MASTER_IMG} alt="Пармастер" className="w-full h-full object-cover" />
+          </div>
+          <div className="p-8 md:p-10 flex flex-col justify-center">
+            <div className="font-script text-2xl mb-1" style={{ color: "hsl(var(--amber))" }}>Ваш пармастер</div>
+            <h3 className="font-display font-bold text-3xl text-white mb-4 uppercase">Мастер живого пара</h3>
+            <p className="text-white/55 leading-relaxed mb-6">
+              Более 10 лет искусства парения. Чувствую тело, температуру и настроение каждого гостя. Использую только натуральные веники, травы и масла — никакой суеты, только глубокий релакс и забота.
+            </p>
+            <div className="flex gap-6">
+              {[
+                { v: "10+", l: "лет опыта" },
+                { v: "5 000+", l: "гостей" },
+                { v: "4.9", l: "рейтинг" },
+              ].map((s) => (
+                <div key={s.l}>
+                  <div className="font-display font-bold text-2xl" style={{ color: "hsl(var(--amber))" }}>{s.v}</div>
+                  <div className="text-white/40 text-xs">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <section id="reviews" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="font-script text-2xl mb-2" style={{ color: "hsl(var(--amber))" }}>Что говорят гости</div>
+          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white">Отзывы</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4 mb-10">
+          {reviews.map((r) => (
+            <div key={r.id} className="rounded-2xl border border-white/5 p-5 animate-fade-in" style={{ background: "hsl(var(--card))" }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-[hsl(var(--primary-foreground))]"
+                  style={{ background: "hsl(var(--amber))" }}
+                >
+                  {r.name[0]}
+                </div>
+                <div>
+                  <div className="text-white font-medium text-sm">{r.name}</div>
+                  <div className="text-white/35 text-xs">{r.date}</div>
+                </div>
+              </div>
+              <div className="flex gap-0.5 mb-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Icon key={i} name="Star" size={14} className={i < r.rating ? "text-[hsl(var(--amber))]" : "text-white/15"} />
+                ))}
+              </div>
+              <p className="text-white/55 text-sm leading-relaxed">{r.text}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Review form */}
+        <div className="glass rounded-2xl border border-white/5 p-6 md:p-8 max-w-2xl mx-auto">
+          <h3 className="font-display font-semibold text-xl text-white mb-5">Оставить отзыв</h3>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-white/45 text-sm mr-2">Оценка:</span>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <button key={i} onClick={() => setRevRating(i + 1)} className="transition-transform hover:scale-125">
+                <Icon name="Star" size={26} className={i < revRating ? "text-[hsl(var(--amber))]" : "text-white/20"} />
+              </button>
+            ))}
+          </div>
+          <input
+            value={revName}
+            onChange={(e) => setRevName(e.target.value)}
+            placeholder="Ваше имя"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors mb-3"
+          />
+          <textarea
+            value={revText}
+            onChange={(e) => setRevText(e.target.value)}
+            placeholder="Поделитесь впечатлениями о парении..."
+            rows={3}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors resize-none mb-4"
+          />
+          <button
+            onClick={submitReview}
+            className="w-full py-3.5 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-[1.02]"
+            style={{ background: "hsl(var(--amber))" }}
+          >
+            Опубликовать отзыв
+          </button>
+        </div>
+      </section>
+
+      {/* TIPS */}
+      <section id="tips" className="py-20 px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="text-5xl mb-4">🙏</div>
+          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white mb-3">Чаевые мастеру</h2>
+          <p className="text-white/50 mb-8">
+            Понравилось парение? Поблагодарите пармастера — это лучшая мотивация дарить тепло и заботу.
+          </p>
+
+          <div className="glass rounded-2xl border border-white/5 p-6 md:p-8">
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              {TIP_OPTIONS.map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => { setTip(amount); setCustomTip(""); }}
+                  className={`py-4 rounded-xl font-display font-bold text-lg transition-all ${
+                    tip === amount ? "text-[hsl(var(--primary-foreground))] scale-105" : "text-white bg-white/5 hover:bg-white/10"
+                  }`}
+                  style={tip === amount ? { background: "hsl(var(--amber))" } : {}}
+                >
+                  {amount} ₽
+                </button>
+              ))}
+            </div>
+            <input
+              value={customTip}
+              onChange={(e) => { setCustomTip(e.target.value.replace(/\D/g, "")); setTip(null); }}
+              placeholder="Своя сумма, ₽"
+              inputMode="numeric"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-center placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors mb-4"
+            />
+            <button
+              onClick={sendTip}
+              className="w-full py-4 rounded-xl font-bold text-[hsl(var(--primary-foreground))] text-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+              style={{ background: "hsl(var(--amber))", boxShadow: "0 0 30px rgba(228,150,60,0.3)" }}
+            >
+              <Icon name="Heart" size={20} />
+              Поблагодарить мастера
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT / FOOTER */}
+      <footer id="contact" className="py-16 px-4 sm:px-6 border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
+          <div>
+            <div className="font-display font-bold text-xl uppercase mb-3">
+              <span className="text-white">Парм</span>
+              <span style={{ color: "hsl(var(--amber))" }}>астер</span>
+            </div>
+            <p className="text-white/40 text-sm leading-relaxed">
+              Авторские программы парения в термальном комплексе Termoland Краснодар.
+            </p>
+          </div>
+          {[
+            { icon: "MapPin", label: "Адрес", value: "Termoland, Краснодар" },
+            { icon: "Phone", label: "Запись", value: "+7 (861) 000-00-00" },
+          ].map((c) => (
+            <div key={c.label} className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(228,150,60,0.1)" }}>
+                <Icon name={c.icon as "MapPin"} size={18} className="text-[hsl(var(--amber))]" />
+              </div>
+              <div>
+                <div className="text-white/40 text-xs">{c.label}</div>
+                <div className="text-white font-medium">{c.value}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="max-w-5xl mx-auto mt-10 pt-6 border-t border-white/5 text-center text-white/25 text-xs">
+          © 2026 Пармастер · Termoland Краснодар · Сделано с теплом
+        </div>
+      </footer>
+
+      {/* PROGRAM MODAL */}
+      {selected && (
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4" onClick={() => setSelected(null)}>
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
           <div
-            className="relative w-full md:w-[420px] h-[90vh] md:h-screen flex flex-col rounded-t-3xl md:rounded-none border-t md:border-l md:border-t-0 border-white/5 animate-slide-up"
+            className="relative w-full md:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/5 p-7 animate-slide-up"
             style={{ background: "hsl(var(--card))" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-white/5">
-              <h2 className="font-display font-bold text-xl text-white flex items-center gap-2">
-                <Icon name="ShoppingBag" size={20} className="text-[#00E6DC]" />
-                Корзина
-                {cart.length > 0 && (
-                  <span
-                    className="w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-[#050c0f]"
-                    style={{ background: "#00E6DC" }}
-                  >
-                    {cart.length}
-                  </span>
-                )}
-              </h2>
+            <button
+              onClick={() => setSelected(null)}
+              className="absolute top-5 right-5 w-9 h-9 rounded-xl glass flex items-center justify-center text-white/60 hover:text-white"
+            >
+              <Icon name="X" size={18} />
+            </button>
+            {selected.badge && (
+              <span className="px-3 py-1 rounded-full text-xs font-bold inline-block mb-3" style={{ background: "rgba(228,150,60,0.12)", color: "hsl(var(--amber))" }}>
+                {selected.badge}
+              </span>
+            )}
+            <h2 className="font-display font-bold text-3xl text-white mb-3 pr-10">{selected.name}</h2>
+            <div className="flex items-center gap-2 text-white/45 text-sm mb-5">
+              <Icon name="Clock" size={15} />
+              Длительность: {selected.duration}
+            </div>
+            <p className="text-white/60 leading-relaxed mb-6">{selected.full}</p>
+            <div className="rounded-xl p-4 mb-6 text-sm text-white/45 leading-relaxed" style={{ background: "rgba(255,255,255,0.03)" }}>
+              <p>• Парение рассчитано на одного человека.</p>
+              <p>• Необходима предварительная запись.</p>
+              <p>• Не входит в стоимость билета, оплачивается отдельно.</p>
+            </div>
+            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+              <span className="font-display font-bold text-3xl text-white">{selected.price.toLocaleString()} ₽</span>
               <button
-                onClick={() => setCartOpen(false)}
-                className="w-9 h-9 rounded-xl glass flex items-center justify-center text-white/50 hover:text-white"
+                onClick={() => { toast({ title: "Заявка принята 🌿", description: `${selected.name} — с вами свяжутся для записи` }); setSelected(null); }}
+                className="px-7 py-3.5 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-105"
+                style={{ background: "hsl(var(--amber))", boxShadow: "0 0 20px rgba(228,150,60,0.35)" }}
               >
-                <Icon name="X" size={18} />
+                Записаться
               </button>
             </div>
-
-            <div className="flex-1 overflow-y-auto p-6 space-y-3">
-              {cart.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="text-5xl mb-4">🛒</div>
-                  <div className="text-white/40">Корзина пуста</div>
-                  <button
-                    onClick={() => setCartOpen(false)}
-                    className="mt-4 text-sm font-medium"
-                    style={{ color: "#00E6DC" }}
-                  >
-                    Выбрать услугу →
-                  </button>
-                </div>
-              ) : (
-                cart.map((service) => (
-                  <div
-                    key={service.id}
-                    className="flex items-center gap-4 p-4 rounded-2xl border border-white/5"
-                    style={{ background: "rgba(255,255,255,0.02)" }}
-                  >
-                    <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0">
-                      <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white text-sm">{service.name}</div>
-                      <div className="text-white/40 text-xs">{service.duration}</div>
-                      <div className="font-bold text-sm mt-0.5" style={{ color: service.accent }}>
-                        {service.price.toLocaleString()} ₽
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => removeFromCart(service.id)}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-red-400 hover:bg-red-400/10 transition-all"
-                    >
-                      <Icon name="Trash2" size={15} />
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {cart.length > 0 && (
-              <div className="p-6 border-t border-white/5">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-white/50">Итого</span>
-                  <span className="font-display font-black text-2xl text-white">
-                    {total.toLocaleString()} ₽
-                  </span>
-                </div>
-                <button
-                  className="w-full py-4 rounded-xl font-bold text-[#050c0f] text-lg transition-all hover:scale-[1.02]"
-                  style={{ background: "#00E6DC", boxShadow: "0 0 30px rgba(0,230,220,0.3)" }}
-                >
-                  Оформить запись
-                </button>
-                <p className="text-white/30 text-xs text-center mt-3">
-                  После нажатия с вами свяжется менеджер
-                </p>
-              </div>
-            )}
           </div>
         </div>
       )}
