@@ -307,7 +307,7 @@ export default function Index() {
 
         {/* section header */}
         <div className="text-center mb-16">
-          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>8 вариантов</p>
+          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>8 вариантов Termoland</p>
           <h2 className="font-display font-bold uppercase text-white" style={{ fontSize:"clamp(2.5rem,6vw,5rem)", letterSpacing:"-0.02em" }}>
             Программы парения
           </h2>
