@@ -331,7 +331,7 @@ export default function Index() {
                 <p className="font-script text-2xl mb-1" style={{ color:"var(--gold)" }}>Ваш пармастер</p>
                 <h3 className="font-display font-bold uppercase leading-none mb-2">
                   <span className="block text-white text-5xl">Мария</span>
-                  <span className="block glow-gold text-3xl font-light tracking-widest">Пармастер · Хилер</span>
+                  <span className="block glow-gold text-3xl font-light tracking-widest">пармастер  · Хилер · Практик</span>
                 </h3>
                 <div className="h-px w-16 my-4" style={{ background:"linear-gradient(to right, var(--gold), transparent)" }} />
                 <p className="text-white/55 leading-relaxed mb-7 text-sm">
