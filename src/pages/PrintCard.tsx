@@ -1,6 +1,6 @@
 const MASTER_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/bucket/1cf286e3-6f96-47b5-b6b4-02e7e75c4a73.jpg";
 const SITE_URL   = "https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app";
-const QR_URL     = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(SITE_URL)}&margin=4&color=1a0d05&bgcolor=ffffff`;
+const QR_URL     = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/bucket/ad69a5ef-f292-473c-9a61-6ff5aeb5c1c2.png";
 
 export default function PrintCard() {
   return (

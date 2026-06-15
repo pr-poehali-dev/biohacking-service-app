@@ -7,35 +7,35 @@ const SMOKE_IMG  = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd7
 
 const PROGRAMS = [
   { id:1, name:"Фирменный пар",           duration:"50 мин", price:6200, badge:"Премиум",   emoji:"🌿",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/7aa14dc7-bafa-4b92-90ea-7b3f5113a106.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/b49b9b47-671b-4b3b-abff-5782377abeba.jpg",
     short:"Парение в два захода с тёплыми припарками, медово-соляное скрабирование, ароматерапия луговыми травами.",
     full:"Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом." },
   { id:2, name:"Цитрусовое парение",       duration:"35 мин", price:3900, badge:null,        emoji:"🍊",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/280742f1-6b9d-4b15-a77a-f63ba45376dd.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/46755cf1-dfe3-4090-81d2-db53e7fd3edd.jpg",
     short:"Будоражащий купаж пихты и цитруса, дуб для тела, завершающий пилинг сочным цитрусом.",
     full:"Приготовьтесь к будоражащему ваше сознание сочетанию прохладной пихты и сочного цитруса, а могучий дуб не оставит ваше тело равнодушным. Лёгкий пилинг сочным цитрусом дополнит ваш купаж ощущением наполненности и настоящего расслабления." },
   { id:3, name:"Бодрящее парение",         duration:"35 мин", price:3700, badge:"Хит",       emoji:"🌲",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/8878d273-b42f-4b85-beb0-2abdaf1ef3c2.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/4e703d40-16a6-417b-afed-c253373ed86e.jpg",
     short:"Авторский ритуал с хвоей пихты — прилив сил, ясность ума, оздоровление дыхательных путей.",
     full:"Аромат живой пихты переносит в прохладу северной тайги, очищая мысли. Парение тела, ароматерапия ледяной пихтой, выход на контраст, чаепитие и догрев. Оздоровление дыхательных путей, улучшение кожи, снятие стресса и мощный прилив жизненного тонуса." },
   { id:4, name:"Знахарь",                  duration:"20 мин", price:3200, badge:null,        emoji:"🌿",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/e0bfd6dc-5eaf-4f9d-890e-708a3cd303c2.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/e35a7adb-812a-4cad-bed7-7727281d305a.jpg",
     short:"Эвкалипт для иммунитета под звонкий шелест дуба. Ингаляция, прогрев ног в настое эвкалипта.",
     full:"Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта." },
   { id:5, name:"Традиционное парение",     duration:"25 мин", price:3200, badge:null,        emoji:"🍃",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/baa1d46c-3023-4ca5-b1bb-cb780a9f09f4.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/f405d05f-79b3-4c26-8595-821d174cb3fb.jpg",
     short:"Тёплый пар и нежная берёза. Прогрев дубовыми вениками и банная помывка берёзой.",
     full:"Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой." },
   { id:6, name:"Парение дубовыми вениками",duration:"15 мин", price:2500, badge:"Классика", emoji:"🌾",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/7430ea71-4710-4c28-b826-483e04881ea9.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/6a00f70b-84d3-491b-b971-8bb1f60ecf1d.jpg",
     short:"Прогрев каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
     full:"Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика." },
   { id:7, name:"Мёд и травы",              duration:"20 мин", price:2800, badge:null,        emoji:"🍯",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/082b3020-d0fe-48f1-bedb-03160127bc27.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/cb638222-5d22-4634-86b8-57bc0a962543.jpg",
     short:"Глубокое парение, ароматерапия луговыми травами и скрабирование натуральным мёдом.",
     full:"Парение подготавливает тело, в воздухе разливается благоухание луговых трав, а тёплый мёд создаёт атмосферу комфорта. Скрабирование натуральным мёдом делает кожу бархатистой и напитанной. Очищение, детокс, релакс и укрепление иммунитета." },
   { id:8, name:"Детское парение",          duration:"10 мин", price:1200, badge:"До 12 лет", emoji:"🌸",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/f1669a2d-4391-41ef-91b7-5404bb32b709.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/7a64ea12-c9e0-477f-a959-242638f9b017.jpg",
     short:"Мягкий ритуал для детей: лёгкое парение дубовым и пихтовым вениками, ароматерапия, забота мастера.",
     full:"Специальный мягкий ритуал для детей до 12 лет. Лёгкое парение дубовым и пихтовым вениками безопасно для детей. Ароматерапия и расслабление в парной. Активизирует кровообращение, укрепляет иммунитет, улучшает сон." },
 ];
@@ -123,6 +123,7 @@ export default function Index() {
   const [navScrolled, setNavScrolled] = useState(false);
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [showSbpQr, setShowSbpQr] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -130,6 +131,15 @@ export default function Index() {
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  // автопрокрутка карусели
+  useEffect(() => {
+    if (isPaused) return;
+    const t = setInterval(() => {
+      setCarouselIdx(i => (i + 1) % PROGRAMS.length);
+    }, 3500);
+    return () => clearInterval(t);
+  }, [isPaused]);
 
   const scroll = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -155,6 +165,46 @@ export default function Index() {
         style={{ background: "radial-gradient(circle, rgba(232,148,60,0.08) 0%, transparent 70%)" }} />
       <div className="fixed bottom-[-15vh] right-[-10vw] w-[50vw] h-[50vw] orb pointer-events-none z-0"
         style={{ background: "radial-gradient(circle, rgba(200,97,74,0.06) 0%, transparent 70%)" }} />
+
+      {/* 3D floating spheres */}
+      <div className="fixed pointer-events-none z-0" style={{ top:"25vh", right:"5vw" }}>
+        <div className="animate-float" style={{ animationDelay:"0s", animationDuration:"6s" }}>
+          <div style={{
+            width:"80px", height:"80px", borderRadius:"50%",
+            background:"radial-gradient(circle at 35% 35%, rgba(232,148,60,0.35), rgba(200,97,74,0.08) 60%, transparent)",
+            border:"1px solid rgba(232,148,60,0.2)",
+            boxShadow:"0 0 30px rgba(232,148,60,0.1), inset 0 0 20px rgba(232,148,60,0.05)",
+            backdropFilter:"blur(4px)",
+          }} />
+        </div>
+      </div>
+      <div className="fixed pointer-events-none z-0" style={{ top:"55vh", left:"3vw" }}>
+        <div className="animate-float" style={{ animationDelay:"2s", animationDuration:"8s" }}>
+          <div style={{
+            width:"50px", height:"50px", borderRadius:"50%",
+            background:"radial-gradient(circle at 35% 35%, rgba(200,97,74,0.3), transparent 65%)",
+            border:"1px solid rgba(200,97,74,0.15)",
+            boxShadow:"0 0 20px rgba(200,97,74,0.08)",
+          }} />
+        </div>
+      </div>
+      <div className="fixed pointer-events-none z-0" style={{ top:"75vh", right:"10vw" }}>
+        <div className="animate-float" style={{ animationDelay:"4s", animationDuration:"7s" }}>
+          <div style={{
+            width:"35px", height:"35px", borderRadius:"50%",
+            background:"radial-gradient(circle at 35% 35%, rgba(232,148,60,0.25), transparent 65%)",
+            border:"1px solid rgba(232,148,60,0.12)",
+          }} />
+        </div>
+      </div>
+      {/* вращающийся тор */}
+      <div className="fixed pointer-events-none z-0 animate-spin-slow" style={{ top:"40vh", right:"2vw", opacity:0.07 }}>
+        <div style={{
+          width:"120px", height:"120px", borderRadius:"50%",
+          border:"2px solid var(--gold)",
+          boxShadow:"0 0 20px rgba(232,148,60,0.3)",
+        }} />
+      </div>
 
       {/* ══ NAV ══ */}
       <nav
@@ -268,24 +318,27 @@ export default function Index() {
         <div className="relative">
           {/* стрелки */}
           <button
-            onClick={()=>setCarouselIdx(i=>Math.max(0,i-1))}
-            disabled={carouselIdx===0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all disabled:opacity-20 disabled:cursor-default"
+            onClick={()=>{ setCarouselIdx(i=>(i-1+PROGRAMS.length)%PROGRAMS.length); setIsPaused(true); setTimeout(()=>setIsPaused(false),6000); }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all"
           >
             <Icon name="ChevronLeft" size={20} />
           </button>
           <button
-            onClick={()=>setCarouselIdx(i=>Math.min(PROGRAMS.length-1,i+1))}
-            disabled={carouselIdx===PROGRAMS.length-1}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all disabled:opacity-20 disabled:cursor-default"
+            onClick={()=>{ setCarouselIdx(i=>(i+1)%PROGRAMS.length); setIsPaused(true); setTimeout(()=>setIsPaused(false),6000); }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-11 h-11 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all"
           >
             <Icon name="ChevronRight" size={20} />
           </button>
 
           {/* трек */}
-          <div ref={carouselRef} className="overflow-hidden rounded-3xl">
+          <div
+            ref={carouselRef}
+            className="overflow-hidden rounded-3xl"
+            onMouseEnter={()=>setIsPaused(true)}
+            onMouseLeave={()=>setIsPaused(false)}
+          >
             <div
-              className="flex transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+              className="flex transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]"
               style={{ transform:`translateX(-${carouselIdx*100}%)` }}
             >
               {PROGRAMS.map((p)=>(
