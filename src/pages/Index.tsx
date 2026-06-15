@@ -204,9 +204,7 @@ export default function Index() {
           </p>
 
           <h1 className="font-display font-bold uppercase leading-[0.88] mb-6">
-            <span className="block glow-gold" style={{ fontSize: "clamp(2rem,7vw,5.5rem)", letterSpacing:"0.04em", fontWeight:300 }}>
-              Мария
-            </span>
+            <span className="block glow-gold" style={{ fontSize: "clamp(2rem,7vw,5.5rem)", letterSpacing:"0.04em", fontWeight:300 }}></span>
             <span className="block text-white" style={{ fontSize: "clamp(3rem,10vw,8rem)", letterSpacing:"-0.02em" }}>
               Пармастер
             </span>
