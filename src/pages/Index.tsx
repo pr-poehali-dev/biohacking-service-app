@@ -328,7 +328,7 @@ export default function Index() {
                 </div>
               </div>
               <div className="p-8 md:p-12 flex flex-col justify-center">
-                <p className="font-script text-2xl mb-1" style={{ color:"var(--gold)" }}>Ваш целитель</p>
+                <p className="font-script text-2xl mb-1" style={{ color:"var(--gold)" }}>Ваш пармастер</p>
                 <h3 className="font-display font-bold uppercase leading-none mb-2">
                   <span className="block text-white text-5xl">Мария</span>
                   <span className="block glow-gold text-3xl font-light tracking-widest">Пармастер · Хилер</span>
