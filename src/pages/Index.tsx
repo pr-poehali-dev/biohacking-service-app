@@ -570,10 +570,8 @@ export default function Index() {
               target="_blank"
               rel="noreferrer"
               className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
-            >
-              <span className="text-xl">⚡</span>
-              Оплатить через СБП · Сбербанк
-            </a>
+            >⚡Оплатить через СБП
+</a>
 
             <p className="text-white/25 text-xs text-center mt-3">
               Перевод по номеру телефона +7 (918) 686-06-50 через Сбербанк Онлайн
