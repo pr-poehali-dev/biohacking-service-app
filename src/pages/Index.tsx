@@ -467,46 +467,128 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ══ QR-КОД ══ */}
+      {/* ══ ПЕЧАТНАЯ КАРТОЧКА ══ */}
       <section className="py-20 px-5">
-        <div className="max-w-lg mx-auto text-center">
-          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Поделитесь с гостями</p>
-          <h2 className="font-display font-bold uppercase text-white mb-3" style={{ fontSize:"clamp(2rem,5vw,3.5rem)", letterSpacing:"-0.02em" }}>
-            QR-код сайта
-          </h2>
-          <p className="text-white/40 text-sm mb-8">
-            Распечатайте и разместите в бане — гости смогут отсканировать и перейти на страницу с отзывами и чаевыми
-          </p>
-          <Card3D
-            className="rounded-3xl border border-white/8 p-8 inline-flex flex-col items-center gap-6"
-            style={{ background:"hsl(var(--card))" }}
-          >
-            {/* QR via api.qrserver.com — бесплатный, без регистрации */}
-            <div className="p-4 rounded-2xl bg-white">
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=4&color=1a1008&bgcolor=ffffff"
-                alt="QR-код сайта Марии"
-                width={220}
-                height={220}
-                className="block rounded-lg"
-              />
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Для гостей</p>
+            <h2 className="font-display font-bold uppercase text-white" style={{ fontSize:"clamp(2rem,5vw,3.5rem)", letterSpacing:"-0.02em" }}>
+              Печатная карточка
+            </h2>
+            <p className="text-white/40 text-sm mt-3">
+              Нажмите «Скачать» — получите готовую карточку для печати и размещения в бане
+            </p>
+          </div>
+
+          {/* превью карточки */}
+          <Card3D className="rounded-3xl overflow-hidden border border-white/10 mb-6" style={{ background:"hsl(var(--card))" }}>
+            {/* собственно карточка — то, что будет распечатано */}
+            <div
+              id="print-card"
+              style={{
+                background: "linear-gradient(145deg, #1a0d05 0%, #2a1508 40%, #1a0d05 100%)",
+                padding: "40px 36px 36px",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              {/* декоративные кольца */}
+              <div style={{ position:"absolute", top:"-60px", right:"-60px", width:"220px", height:"220px", border:"1px dashed rgba(232,148,60,0.2)", borderRadius:"50%" }} />
+              <div style={{ position:"absolute", top:"-30px", right:"-30px", width:"150px", height:"150px", border:"1px solid rgba(232,148,60,0.1)", borderRadius:"50%" }} />
+              <div style={{ position:"absolute", bottom:"-40px", left:"-40px", width:"180px", height:"180px", border:"1px dashed rgba(232,148,60,0.15)", borderRadius:"50%" }} />
+
+              {/* верхняя строка */}
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"28px" }}>
+                <div>
+                  <div style={{ fontFamily:"Oswald,sans-serif", fontWeight:300, fontSize:"13px", letterSpacing:"0.2em", color:"rgba(232,148,60,0.7)", textTransform:"uppercase", marginBottom:"4px" }}>
+                    Пармастер · Хилер · Практик
+                  </div>
+                  <div style={{ fontFamily:"Oswald,sans-serif", fontWeight:700, fontSize:"36px", color:"#fff", letterSpacing:"-0.02em", lineHeight:1 }}>
+                    МАРИЯ
+                  </div>
+                </div>
+                {/* фото мастера */}
+                <div style={{ width:"72px", height:"72px", borderRadius:"50%", overflow:"hidden", border:"2px solid rgba(232,148,60,0.5)", flexShrink:0 }}>
+                  <img src={MASTER_IMG} alt="Мария" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top" }} />
+                </div>
+              </div>
+
+              {/* разделитель */}
+              <div style={{ height:"1px", background:"linear-gradient(to right, rgba(232,148,60,0.6), rgba(232,148,60,0.1), transparent)", marginBottom:"28px" }} />
+
+              {/* основная часть: текст + QR */}
+              <div style={{ display:"flex", alignItems:"center", gap:"28px" }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontFamily:"Caveat,cursive", fontSize:"22px", color:"rgba(232,148,60,0.9)", lineHeight:1.3, marginBottom:"14px" }}>
+                    Понравилось парение?
+                  </div>
+                  <div style={{ fontFamily:"Golos Text,sans-serif", fontSize:"14px", color:"rgba(255,255,255,0.6)", lineHeight:1.6, marginBottom:"18px" }}>
+                    Оставьте отзыв или отблагодарите мастера чаевыми — отсканируйте QR-код.
+                  </div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                    {[
+                      { icon:"⭐", text:"Оставить отзыв" },
+                      { icon:"🙏", text:"Отправить чаевые" },
+                      { icon:"🌿", text:"Выбрать программу парения" },
+                    ].map(item => (
+                      <div key={item.text} style={{ display:"flex", alignItems:"center", gap:"8px", fontFamily:"Golos Text,sans-serif", fontSize:"13px", color:"rgba(255,255,255,0.5)" }}>
+                        <span>{item.icon}</span>
+                        <span>{item.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* QR */}
+                <div style={{ flexShrink:0, display:"flex", flexDirection:"column", alignItems:"center", gap:"10px" }}>
+                  <div style={{ background:"#fff", padding:"10px", borderRadius:"16px", boxShadow:"0 0 30px rgba(232,148,60,0.2)" }}>
+                    <img
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=2&color=1a0d05&bgcolor=ffffff"
+                      alt="QR"
+                      width={160}
+                      height={160}
+                      style={{ display:"block", borderRadius:"8px" }}
+                    />
+                  </div>
+                  <div style={{ fontFamily:"Golos Text,sans-serif", fontSize:"10px", color:"rgba(255,255,255,0.25)", textAlign:"center" }}>
+                    Наведите камеру
+                  </div>
+                </div>
+              </div>
+
+              {/* нижняя строка */}
+              <div style={{ marginTop:"24px", paddingTop:"20px", borderTop:"1px solid rgba(255,255,255,0.06)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                <div style={{ fontFamily:"Golos Text,sans-serif", fontSize:"12px", color:"rgba(255,255,255,0.3)" }}>
+                  📞 +7 (918) 686-06-50
+                </div>
+                <div style={{ fontFamily:"Golos Text,sans-serif", fontSize:"12px", color:"rgba(255,255,255,0.3)" }}>
+                  Любая баня Краснодара по запросу
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="font-display font-bold text-white text-lg mb-1">Мария · Пармастер</div>
-              <div className="text-white/35 text-xs font-mono">da18a679-098e-494d-8de1-a558d89808d6.poehali.app</div>
-            </div>
+          </Card3D>
+
+          {/* кнопки действий */}
+          <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href="https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=4&color=1a1008&bgcolor=ffffff"
+              href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=https://da18a679-098e-494d-8de1-a558d89808d6.poehali.app&margin=6&color=1a0d05&bgcolor=ffffff"
               download="qr-maria-parmaster.png"
               target="_blank"
               rel="noreferrer"
-              className="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 20px rgba(232,148,60,0.3)" }}
+              className="flex-1 py-4 rounded-2xl font-bold text-center flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 25px rgba(232,148,60,0.3)" }}
             >
               <Icon name="Download" size={18} />
-              Скачать QR-код
+              Скачать QR-код (PNG)
             </a>
-          </Card3D>
+            <button
+              onClick={() => window.print()}
+              className="flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 glass border border-white/10 text-white hover:border-[var(--gold)] transition-all"
+            >
+              <Icon name="Printer" size={18} />
+              Распечатать карточку
+            </button>
+          </div>
         </div>
       </section>
 
