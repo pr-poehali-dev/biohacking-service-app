@@ -199,9 +199,7 @@ export default function Index() {
 
         {/* content */}
         <div className="relative z-10 text-center px-5 max-w-5xl mx-auto animate-fade-in">
-          <p className="font-script text-2xl md:text-3xl mb-3" style={{ color: "var(--gold)", opacity: 0.85 }}>
-            Termoland · Краснодар
-          </p>
+          <p className="font-script text-2xl md:text-3xl mb-3" style={{ color: "var(--gold)", opacity: 0.85 }}>Банная практика · Краснодар</p>
 
           <h1 className="font-display font-bold uppercase leading-[0.88] mb-6">
             <span className="block glow-gold" style={{ fontSize: "clamp(2rem,7vw,5.5rem)", letterSpacing:"0.04em", fontWeight:300 }}></span>
