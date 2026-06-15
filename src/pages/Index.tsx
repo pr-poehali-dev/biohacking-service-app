@@ -7,7 +7,7 @@ const SMOKE_IMG  = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd7
 
 const PROGRAMS = [
   { id:1, name:"Фирменный пар",           duration:"50 мин", price:6200, badge:"Премиум",   emoji:"🌿",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/b49b9b47-671b-4b3b-abff-5782377abeba.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/b438030b-6460-4fc3-bc18-3859fee387fb.jpg",
     short:"Парение в два захода с тёплыми припарками, медово-соляное скрабирование, ароматерапия луговыми травами.",
     full:"Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом." },
   { id:2, name:"Цитрусовое парение",       duration:"35 мин", price:3900, badge:null,        emoji:"🍊",
@@ -23,11 +23,11 @@ const PROGRAMS = [
     short:"Эвкалипт для иммунитета под звонкий шелест дуба. Ингаляция, прогрев ног в настое эвкалипта.",
     full:"Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта." },
   { id:5, name:"Традиционное парение",     duration:"25 мин", price:3200, badge:null,        emoji:"🍃",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/f405d05f-79b3-4c26-8595-821d174cb3fb.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/9699be1b-a1ed-4d76-bb2c-a1fdf8e131ec.jpg",
     short:"Тёплый пар и нежная берёза. Прогрев дубовыми вениками и банная помывка берёзой.",
     full:"Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой." },
   { id:6, name:"Парение дубовыми вениками",duration:"15 мин", price:2500, badge:"Классика", emoji:"🌾",
-    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/6a00f70b-84d3-491b-b971-8bb1f60ecf1d.jpg",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/c6024c27-0a85-43b4-b314-d22e449cd57a.jpg",
     short:"Прогрев каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
     full:"Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика." },
   { id:7, name:"Мёд и травы",              duration:"20 мин", price:2800, badge:null,        emoji:"🍯",
@@ -747,9 +747,30 @@ export default function Index() {
             </div>
             <div>
               <div className="text-white/35 text-xs mb-0.5">Запись</div>
-              <a href="tel:+79186860650" className="text-white font-medium hover:text-[var(--gold)] transition-colors">
+              <a href="tel:+79186860650" className="text-white font-medium hover:text-[var(--gold)] transition-colors block mb-2">
                 +7 (918) 686-06-50
               </a>
+              {/* мессенджеры */}
+              <div className="flex gap-2 flex-wrap">
+                <a
+                  href="https://wa.me/79186860650"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105"
+                  style={{ background:"#25D366", color:"#fff" }}
+                >
+                  <span>💬</span> WhatsApp
+                </a>
+                <a
+                  href="https://max.ru/call/79186860650"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105"
+                  style={{ background:"#0077FF", color:"#fff" }}
+                >
+                  <span>✈️</span> MAX
+                </a>
+              </div>
             </div>
           </div>
         </div>
