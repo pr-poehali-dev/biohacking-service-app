@@ -453,12 +453,33 @@ export default function Index() {
               onFocus={e=>(e.target.style.borderColor="var(--gold)")}
               onBlur={e=>(e.target.style.borderColor="")}
             />
-            <button onClick={sendTip}
-              className="w-full py-4.5 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}>
+
+            {/* реквизиты Сбербанк */}
+            <div className="rounded-2xl p-4 mb-4 text-center" style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(232,148,60,0.2)" }}>
+              <div className="text-white/40 text-xs mb-2 uppercase tracking-widest">Перевод по номеру карты · Сбербанк</div>
+              <div
+                className="font-display font-bold text-2xl tracking-widest text-white mb-1 cursor-pointer select-all"
+                style={{ letterSpacing:"0.12em" }}
+                onClick={() => { navigator.clipboard.writeText("2202208025878902"); toast({ title:"Скопировано! ✓", description:"Номер карты скопирован" }); }}
+              >
+                2202 2080 2587 8902
+              </div>
+              <div className="text-white/35 text-xs">Нажмите на номер — скопируется автоматически</div>
+            </div>
+
+            <a
+              href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip ?? (customTip || 300)}&trncard=2202208025878902`}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}
+            >
               <Icon name="Heart" size={22} />
               Поблагодарить мастера
-            </button>
+            </a>
+            <p className="text-white/25 text-xs text-center mt-3">
+              Откроется Сбербанк Онлайн с уже заполненной суммой
+            </p>
           </Card3D>
         </div>
       </section>
