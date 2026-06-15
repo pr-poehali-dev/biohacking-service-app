@@ -528,9 +528,7 @@ export default function Index() {
           <h2 className="font-display font-bold uppercase text-white mb-2" style={{ fontSize:"clamp(2.2rem,6vw,4.5rem)", letterSpacing:"-0.02em" }}>
             Чаевые мастеру
           </h2>
-          <p className="text-white/45 mb-10 text-lg">
-            Понравилось парение? Поблагодарите мастера — это лучшая энергия для продолжения практики.
-          </p>
+          <p className="text-white/45 mb-10 text-lg">Понравилось парение? Поблагодарите мастера — это станет мощным стимулом для роста и новых экспериментов в банной практике.</p>
 
           <Card3D className="glass-gold rounded-3xl p-7 md:p-9">
             <div className="grid grid-cols-2 gap-3 mb-4">
