@@ -489,21 +489,26 @@ export default function Index() {
           ))}
         </div>
 
-        {/* form */}
-        <Card3D className="rounded-2xl border border-white/6 p-6 md:p-8 max-w-2xl mx-auto"
+        {/* form — без Card3D чтобы клики на звёзды работали */}
+        <div className="rounded-2xl border border-white/6 p-6 md:p-8 max-w-2xl mx-auto"
           style={{ background:"hsl(var(--card))" }}>
           <h3 className="font-display font-semibold text-2xl text-white mb-5 uppercase">Оставить отзыв</h3>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-white/40 text-sm">Оценка:</span>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-white/40 text-sm mr-1">Оценка:</span>
             {Array.from({length:5}).map((_,i)=>(
-              <button key={i} onClick={()=>setRevRating(i+1)} className="transition-transform hover:scale-125">
-                <Icon name="Star" size={28} style={i < revRating ? { color:"var(--gold)" } : { color:"rgba(255,255,255,0.15)" }} />
+              <button
+                key={i}
+                type="button"
+                onClick={(e)=>{ e.stopPropagation(); setRevRating(i+1); }}
+                className="p-1 rounded-lg transition-transform hover:scale-125 active:scale-110"
+                style={{ cursor:"pointer", zIndex:10, position:"relative" }}
+              >
+                <Icon name="Star" size={32} style={i < revRating ? { color:"var(--gold)", filter:"drop-shadow(0 0 6px rgba(232,148,60,0.6))" } : { color:"rgba(255,255,255,0.15)" }} />
               </button>
             ))}
           </div>
           <input value={revName} onChange={e=>setRevName(e.target.value)} placeholder="Ваше имя"
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none transition-colors mb-3"
-            style={{ ["--tw-ring-color" as string]:"var(--gold)" }}
             onFocus={e=>(e.target.style.borderColor="var(--gold)")}
             onBlur={e=>(e.target.style.borderColor="")}
           />
@@ -517,7 +522,7 @@ export default function Index() {
             style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 20px rgba(232,148,60,0.25)" }}>
             Опубликовать отзыв
           </button>
-        </Card3D>
+        </div>
       </section>
 
       {/* ══ ЧАЕВЫЕ ══ */}
@@ -567,26 +572,19 @@ export default function Index() {
               Поблагодарить · Сбербанк
             </a>
 
-            {/* СБП — кнопка показывает QR */}
-            <button
-              onClick={()=>setShowSbpQr(v=>!v)}
+            {/* СБП — прямой переход в Сбер по телефону */}
+            <a
+              href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip !== null ? tip : Number(customTip) || 300}&trnphone=%2B79186860650`}
+              target="_blank"
+              rel="noreferrer"
               className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
             >
               <span className="text-xl">⚡</span>
-              {showSbpQr ? "Скрыть QR СБП" : "Оплатить через СБП"}
-            </button>
-
-            {showSbpQr && (
-              <div className="mt-4 flex flex-col items-center gap-3 animate-fade-in">
-                <div className="p-4 rounded-2xl bg-white" style={{ boxShadow:"0 0 30px rgba(232,148,60,0.25)" }}>
-                  <img src={SBP_QR} alt="QR СБП" width={200} height={200} className="block rounded-lg" />
-                </div>
-                <p className="text-white/40 text-sm">Наведите камеру — перевод через любой банк</p>
-              </div>
-            )}
+              Оплатить через СБП · Сбербанк
+            </a>
 
             <p className="text-white/25 text-xs text-center mt-3">
-              СБП — мгновенный перевод через Тинькофф, ВТБ, Альфа и любой другой банк
+              Перевод по номеру телефона +7 (918) 686-06-50 через Сбербанк Онлайн
             </p>
           </Card3D>
         </div>
