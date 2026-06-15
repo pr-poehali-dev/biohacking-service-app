@@ -2,32 +2,40 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
 
-const MASTER_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/13e1e8ee-1d8e-4cdd-afa7-3ee82fb4d022.jpg";
+const MASTER_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/bucket/1cf286e3-6f96-47b5-b6b4-02e7e75c4a73.jpg";
 const SMOKE_IMG  = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/d50f7121-957f-45f3-b747-a5682352b67e.jpg";
 
 const PROGRAMS = [
   { id:1, name:"Фирменный пар",           duration:"50 мин", price:6200, badge:"Премиум",   emoji:"🌿",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/7aa14dc7-bafa-4b92-90ea-7b3f5113a106.jpg",
     short:"Парение в два захода с тёплыми припарками, медово-соляное скрабирование, ароматерапия луговыми травами.",
     full:"Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом." },
   { id:2, name:"Цитрусовое парение",       duration:"35 мин", price:3900, badge:null,        emoji:"🍊",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/280742f1-6b9d-4b15-a77a-f63ba45376dd.jpg",
     short:"Будоражащий купаж пихты и цитруса, дуб для тела, завершающий пилинг сочным цитрусом.",
     full:"Приготовьтесь к будоражащему ваше сознание сочетанию прохладной пихты и сочного цитруса, а могучий дуб не оставит ваше тело равнодушным. Лёгкий пилинг сочным цитрусом дополнит ваш купаж ощущением наполненности и настоящего расслабления." },
   { id:3, name:"Бодрящее парение",         duration:"35 мин", price:3700, badge:"Хит",       emoji:"🌲",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/8878d273-b42f-4b85-beb0-2abdaf1ef3c2.jpg",
     short:"Авторский ритуал с хвоей пихты — прилив сил, ясность ума, оздоровление дыхательных путей.",
     full:"Аромат живой пихты переносит в прохладу северной тайги, очищая мысли. Парение тела, ароматерапия ледяной пихтой, выход на контраст, чаепитие и догрев. Оздоровление дыхательных путей, улучшение кожи, снятие стресса и мощный прилив жизненного тонуса." },
   { id:4, name:"Знахарь",                  duration:"20 мин", price:3200, badge:null,        emoji:"🌿",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/e0bfd6dc-5eaf-4f9d-890e-708a3cd303c2.jpg",
     short:"Эвкалипт для иммунитета под звонкий шелест дуба. Ингаляция, прогрев ног в настое эвкалипта.",
     full:"Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта." },
   { id:5, name:"Традиционное парение",     duration:"25 мин", price:3200, badge:null,        emoji:"🍃",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/baa1d46c-3023-4ca5-b1bb-cb780a9f09f4.jpg",
     short:"Тёплый пар и нежная берёза. Прогрев дубовыми вениками и банная помывка берёзой.",
     full:"Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой." },
   { id:6, name:"Парение дубовыми вениками",duration:"15 мин", price:2500, badge:"Классика", emoji:"🌾",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/7430ea71-4710-4c28-b826-483e04881ea9.jpg",
     short:"Прогрев каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
     full:"Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика." },
   { id:7, name:"Мёд и травы",              duration:"20 мин", price:2800, badge:null,        emoji:"🍯",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/082b3020-d0fe-48f1-bedb-03160127bc27.jpg",
     short:"Глубокое парение, ароматерапия луговыми травами и скрабирование натуральным мёдом.",
     full:"Парение подготавливает тело, в воздухе разливается благоухание луговых трав, а тёплый мёд создаёт атмосферу комфорта. Скрабирование натуральным мёдом делает кожу бархатистой и напитанной. Очищение, детокс, релакс и укрепление иммунитета." },
   { id:8, name:"Детское парение",          duration:"10 мин", price:1200, badge:"До 12 лет", emoji:"🌸",
+    img:"https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/f1669a2d-4391-41ef-91b7-5404bb32b709.jpg",
     short:"Мягкий ритуал для детей: лёгкое парение дубовым и пихтовым вениками, ароматерапия, забота мастера.",
     full:"Специальный мягкий ритуал для детей до 12 лет. Лёгкое парение дубовым и пихтовым вениками безопасно для детей. Ароматерапия и расслабление в парной. Активизирует кровообращение, укрепляет иммунитет, улучшает сон." },
 ];
@@ -150,8 +158,8 @@ export default function Index() {
       >
         <div className="max-w-6xl mx-auto px-5 flex items-center justify-between">
           <span className="font-display font-bold text-xl tracking-widest uppercase">
-            <span className="text-white/80">Пар</span>
-            <span className="glow-gold">мастер</span>
+            <span className="text-white/80">Мария</span>
+            <span className="glow-gold"> · Пармастер</span>
           </span>
           <div className="hidden md:flex gap-1">
             {[["programs","Программы"],["reviews","Отзывы"],["tips","Чаевые"],["contact","Контакт"]].map(([id,lbl])=>(
@@ -196,6 +204,9 @@ export default function Index() {
           </p>
 
           <h1 className="font-display font-bold uppercase leading-[0.88] mb-6">
+            <span className="block glow-gold" style={{ fontSize: "clamp(2rem,7vw,5.5rem)", letterSpacing:"0.04em", fontWeight:300 }}>
+              Мария
+            </span>
             <span className="block text-white" style={{ fontSize: "clamp(3rem,10vw,8rem)", letterSpacing:"-0.02em" }}>
               Пармастер
             </span>
@@ -260,30 +271,38 @@ export default function Index() {
               className="rounded-2xl border border-white/6 cursor-pointer animate-slide-up overflow-hidden"
               style={{ animationDelay:`${i*0.08}s`, background:"hsl(var(--card))" }}
             >
-              <div onClick={()=>setSelected(p)} className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between mb-3 gap-3">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">{p.emoji}</span>
-                    <h3 className="font-display font-semibold text-xl text-white">{p.name}</h3>
-                  </div>
+              <div onClick={()=>setSelected(p)} className="h-full flex flex-col">
+                {/* program image */}
+                <div className="relative h-44 overflow-hidden">
+                  <img src={p.img} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0" style={{ background:"linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, hsl(var(--card)) 100%)" }} />
+                  {/* badge over image */}
                   {p.badge && (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold shrink-0"
-                      style={{ background:"rgba(232,148,60,0.1)", color:"var(--gold)", border:"1px solid rgba(232,148,60,0.25)" }}>
-                      {p.badge}
-                    </span>
+                    <div className="absolute top-3 right-3">
+                      <span className="px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm"
+                        style={{ background:"rgba(232,148,60,0.85)", color:"hsl(var(--primary-foreground))" }}>
+                        {p.badge}
+                      </span>
+                    </div>
                   )}
+                  <div className="absolute top-3 left-3 text-2xl">{p.emoji}</div>
+                  {/* duration pill */}
+                  <div className="absolute bottom-3 left-3">
+                    <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-sm"
+                      style={{ background:"rgba(0,0,0,0.55)", color:"rgba(255,255,255,0.75)" }}>
+                      <Icon name="Clock" size={11} /> {p.duration}
+                    </span>
+                  </div>
                 </div>
 
-                <p className="text-white/45 text-sm leading-relaxed flex-1 mb-5">{p.short}</p>
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="font-display font-semibold text-xl text-white mb-2">{p.name}</h3>
+                  <p className="text-white/45 text-sm leading-relaxed flex-1 mb-4">{p.short}</p>
 
-                <div className="flex items-center justify-between pt-4 border-t border-white/6">
-                  <span className="flex items-center gap-1.5 text-white/40 text-sm">
-                    <Icon name="Clock" size={14} />{p.duration}
-                  </span>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between pt-4 border-t border-white/6">
                     <span className="font-display font-bold text-2xl text-white">{p.price.toLocaleString()} ₽</span>
                     <span className="text-sm font-medium flex items-center gap-1" style={{ color:"var(--gold)" }}>
-                      Детали <Icon name="ArrowRight" size={14} />
+                      Подробнее <Icon name="ArrowRight" size={14} />
                     </span>
                   </div>
                 </div>
@@ -305,25 +324,25 @@ export default function Index() {
             style={{ background:"hsl(var(--card))" }}
           >
             <div className="grid md:grid-cols-2">
-              <div className="relative h-80 md:h-auto overflow-hidden">
-                <img src={MASTER_IMG} alt="Пармастер" className="w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ background:"linear-gradient(to right, transparent 60%, hsl(var(--card)))" }} />
-                {/* floating badge */}
+              <div className="relative h-96 md:h-auto overflow-hidden">
+                <img src={MASTER_IMG} alt="Мария — пармастер" className="w-full h-full object-cover object-top" />
+                <div className="absolute inset-0" style={{ background:"linear-gradient(to right, transparent 55%, hsl(var(--card))), linear-gradient(to top, hsl(var(--card)) 0%, transparent 30%)" }} />
                 <div className="absolute bottom-5 left-5 px-4 py-2 rounded-xl glass border border-white/10">
                   <span className="font-script text-xl" style={{ color:"var(--gold)" }}>Мастер живого пара</span>
                 </div>
               </div>
               <div className="p-8 md:p-12 flex flex-col justify-center">
-                <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Ваш целитель</p>
-                <h3 className="font-display font-bold uppercase text-white text-4xl mb-5 leading-none">
-                  Пармастер<br/>
-                  <span className="glow-gold">Хилер</span>
+                <p className="font-script text-2xl mb-1" style={{ color:"var(--gold)" }}>Ваш целитель</p>
+                <h3 className="font-display font-bold uppercase leading-none mb-2">
+                  <span className="block text-white text-5xl">Мария</span>
+                  <span className="block glow-gold text-3xl font-light tracking-widest">Пармастер · Хилер</span>
                 </h3>
-                <p className="text-white/50 leading-relaxed mb-7 text-sm">
-                  Более 10 лет практики. Чувствую тело, температуру и состояние каждого гостя. Только натуральные веники, живые травы и масла. Парение — это не процедура, это ритуал исцеления.
+                <div className="h-px w-16 my-4" style={{ background:"linear-gradient(to right, var(--gold), transparent)" }} />
+                <p className="text-white/55 leading-relaxed mb-7 text-sm">
+                  Мария — практик живого пара с глубоким пониманием тела и природы. Каждое парение — это индивидуальный ритуал: она чувствует состояние гостя, подбирает веники, травы и температуру так, чтобы тело раскрылось и восстановилось. Приходит не просто банный мастер, а хилер, который работает руками, сердцем и знанием.
                 </p>
-                <div className="grid grid-cols-3 gap-4">
-                  {[["10+","лет практики"],["5 000+","гостей"],["4.9★","рейтинг"]].map(([v,l])=>(
+                <div className="grid grid-cols-3 gap-3">
+                  {[["7+","лет практики"],["3 000+","гостей"],["5.0★","рейтинг"]].map(([v,l])=>(
                     <div key={l} className="glass rounded-xl p-3 text-center border border-white/5">
                       <div className="font-display font-bold text-xl glow-gold">{v}</div>
                       <div className="text-white/35 text-xs mt-1">{l}</div>
@@ -452,32 +471,42 @@ export default function Index() {
       <footer id="contact" className="py-16 px-5 border-t border-white/5">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 mb-10">
           <div>
-            <div className="font-display font-bold text-2xl uppercase mb-3">
-              <span className="text-white/70">Парм</span>
-              <span className="glow-gold">астер</span>
+            <div className="font-display font-bold text-2xl uppercase mb-1">
+              <span className="glow-gold">Мария</span>
             </div>
+            <div className="font-display text-sm uppercase tracking-widest text-white/40 mb-3">Пармастер · Хилер · Практик</div>
             <p className="text-white/35 text-sm leading-relaxed">
-              Авторские программы парения в термальном комплексе Termoland Краснодар
+              Авторские программы парения. Приезжаю в любую баню Краснодара по вашему запросу.
             </p>
           </div>
-          {[
-            { icon:"MapPin", label:"Адрес", value:"Termoland, Краснодар" },
-            { icon:"Phone",  label:"Запись", value:"+7 (861) 000-00-00" },
-          ].map(c=>(
-            <div key={c.label} className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background:"rgba(232,148,60,0.1)", border:"1px solid rgba(232,148,60,0.2)" }}>
-                <Icon name={c.icon as "MapPin"} size={18} style={{ color:"var(--gold)" }} />
-              </div>
-              <div>
-                <div className="text-white/35 text-xs">{c.label}</div>
-                <div className="text-white font-medium">{c.value}</div>
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background:"rgba(232,148,60,0.1)", border:"1px solid rgba(232,148,60,0.2)" }}>
+              <Icon name="MapPin" size={18} style={{ color:"var(--gold)" }} />
+            </div>
+            <div>
+              <div className="text-white/35 text-xs mb-0.5">Адрес</div>
+              <div className="text-white font-medium">Любая баня Краснодара</div>
+              <div className="text-white/45 text-sm mt-1 leading-snug">
+                Мария приедет к вам — выберите любую удобную баню в городе, и ритуал парения пройдёт там.
               </div>
             </div>
-          ))}
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background:"rgba(232,148,60,0.1)", border:"1px solid rgba(232,148,60,0.2)" }}>
+              <Icon name="Phone" size={18} style={{ color:"var(--gold)" }} />
+            </div>
+            <div>
+              <div className="text-white/35 text-xs mb-0.5">Запись</div>
+              <a href="tel:+79186860650" className="text-white font-medium hover:text-[var(--gold)] transition-colors">
+                +7 (918) 686-06-50
+              </a>
+            </div>
+          </div>
         </div>
         <div className="max-w-5xl mx-auto pt-6 border-t border-white/5 text-center text-white/20 text-xs">
-          © 2026 Пармастер · Хилер · Практик · Termoland Краснодар
+          © 2026 Мария · Пармастер · Хилер · Практик · Краснодар
         </div>
       </footer>
 
@@ -487,25 +516,31 @@ export default function Index() {
           onClick={()=>setSelected(null)}>
           <div className="absolute inset-0 bg-black/75 backdrop-blur-md" />
           <div
-            className="relative w-full md:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/8 p-7 animate-slide-up"
+            className="relative w-full md:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/8 animate-slide-up"
             style={{ background:"hsl(var(--card))" }}
             onClick={e=>e.stopPropagation()}
           >
-            <button onClick={()=>setSelected(null)}
-              className="absolute top-5 right-5 w-9 h-9 rounded-xl glass flex items-center justify-center text-white/50 hover:text-white transition-colors">
-              <Icon name="X" size={18} />
-            </button>
-
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-4xl">{selected.emoji}</span>
+            {/* modal image */}
+            <div className="relative h-52 overflow-hidden rounded-t-3xl md:rounded-t-2xl">
+              <img src={selected.img} alt={selected.name} className="w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background:"linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, hsl(var(--card)) 100%)" }} />
+              <button onClick={()=>setSelected(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white transition-colors border border-white/10">
+                <Icon name="X" size={18} />
+              </button>
               {selected.badge && (
-                <span className="px-3 py-1 rounded-full text-xs font-bold"
-                  style={{ background:"rgba(232,148,60,0.1)", color:"var(--gold)", border:"1px solid rgba(232,148,60,0.25)" }}>
-                  {selected.badge}
-                </span>
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold"
+                    style={{ background:"rgba(232,148,60,0.9)", color:"hsl(var(--primary-foreground))" }}>
+                    {selected.badge}
+                  </span>
+                </div>
               )}
+              <div className="absolute bottom-3 left-5 text-3xl">{selected.emoji}</div>
             </div>
-            <h2 className="font-display font-bold text-3xl text-white mb-2 pr-10">{selected.name}</h2>
+
+            <div className="p-6">
+            <h2 className="font-display font-bold text-3xl text-white mb-2">{selected.name}</h2>
             <p className="text-white/40 text-sm mb-5 flex items-center gap-1.5">
               <Icon name="Clock" size={14} /> Длительность: {selected.duration}
             </p>
@@ -518,12 +553,13 @@ export default function Index() {
             </div>
             <div className="flex items-center justify-between pt-4 border-t border-white/6">
               <span className="font-display font-bold text-3xl text-white">{selected.price.toLocaleString()} ₽</span>
-              <button
-                onClick={()=>{ toast({ title:"Заявка принята 🌿", description:`${selected.name} — с вами свяжутся для записи` }); setSelected(null); }}
-                className="px-7 py-3.5 rounded-xl font-bold transition-all hover:scale-105"
+              <a href="tel:+79186860650"
+                className="px-7 py-3.5 rounded-xl font-bold transition-all hover:scale-105 flex items-center gap-2"
                 style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 25px rgba(232,148,60,0.35)" }}>
+                <Icon name="Phone" size={16} />
                 Записаться
-              </button>
+              </a>
+            </div>
             </div>
           </div>
         </div>
