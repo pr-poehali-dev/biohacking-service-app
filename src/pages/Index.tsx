@@ -713,9 +713,7 @@ export default function Index() {
               <span className="glow-gold">Мария</span>
             </div>
             <div className="font-display text-sm uppercase tracking-widest text-white/40 mb-3">Пармастер · Хилер · Практик</div>
-            <p className="text-white/35 text-sm leading-relaxed">
-              Авторские программы парения. Приезжаю в любую баню Краснодара по вашему запросу.
-            </p>
+            <p className="text-white/35 text-sm leading-relaxed">Авторские и традиционные программы парения. </p>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
