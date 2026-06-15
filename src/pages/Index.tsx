@@ -1,471 +1,527 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
 
-const HERO_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/224c221f-f9c1-474b-8796-99606cc638ca.jpg";
 const MASTER_IMG = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/13e1e8ee-1d8e-4cdd-afa7-3ee82fb4d022.jpg";
+const SMOKE_IMG  = "https://cdn.poehali.dev/projects/bd9db7a1-9034-49dd-9531-cd77933f55b3/files/d50f7121-957f-45f3-b747-a5682352b67e.jpg";
 
 const PROGRAMS = [
-  {
-    id: 1,
-    name: "Фирменный пар",
-    duration: "50 мин",
-    price: 6200,
-    badge: "Премиум",
-    short: "Согревающее парение в два захода с тёплыми припарками, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником.",
-    full: "Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом.",
-  },
-  {
-    id: 2,
-    name: "Цитрусовое парение",
-    duration: "35 мин",
-    price: 3900,
-    badge: null,
-    short: "Будоражащее сознание сочетание прохладной пихты и сочного цитруса, могучий дуб для тела и завершающий пилинг сочным цитрусом.",
-    full: "Приготовьтесь к будоражащему ваше сознание сочетанию прохладной пихты и сочного цитруса, а могучий дуб не оставит ваше тело равнодушным. В завершение процедуры лёгкий пилинг сочным цитрусом дополнит ваш купаж впечатлений ощущением наполненности и настоящего расслабления.",
-  },
-  {
-    id: 3,
-    name: "Бодрящее парение",
-    duration: "35 мин",
-    price: 3700,
-    badge: "Хит",
-    short: "Авторская программа с хвойным букетом живой пихты — путешествие в прохладу северной тайги, мощный прилив сил и оздоровление дыхательных путей.",
-    full: "Авторская программа «Бодрящее парение» создана для тех, кто хочет сбросить груз повседневных забот и почувствовать мощный прилив сил. Главную роль играет хвойный букет: аромат живой пихты переносит в прохладу северной тайги, очищая мысли. Включает парение всего тела, ароматерапию ледяной пихтой, выход на контраст, чаепитие и догрев. Оздоровление дыхательных путей, улучшение состояния кожи, снятие стресса и повышение жизненного тонуса.",
-  },
-  {
-    id: 4,
-    name: "Знахарь",
-    duration: "20 мин",
-    price: 3200,
-    badge: null,
-    short: "Эвкалипт — лучший помощник для иммунитета! Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта.",
-    full: "Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта.",
-  },
-  {
-    id: 5,
-    name: "Традиционное парение",
-    duration: "25 мин",
-    price: 3200,
-    badge: null,
-    short: "Тёплый пар и нежная берёза окутывают тело. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой.",
-    full: "Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой.",
-  },
-  {
-    id: 6,
-    name: "Парение дубовыми вениками",
-    duration: "15 мин",
-    price: 2500,
-    badge: "Классика",
-    short: "Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
-    full: "Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика.",
-  },
-  {
-    id: 7,
-    name: "Мёд и травы",
-    duration: "20 мин",
-    price: 2800,
-    badge: null,
-    short: "Глубокое парение, ароматерапия луговыми травами и скрабирование натуральным мёдом — кожа становится бархатистой и напитанной.",
-    full: "Уникальное сочетание традиций и природной силы. Глубокое парение подготавливает тело, в воздухе разливается благоухание луговых трав, а тёплый мёд создаёт атмосферу комфорта. Скрабирование натуральным мёдом удаляет ороговевшие клетки, делая кожу бархатистой и напитанной. Очищение и детокс, уход за кожей, релакс и укрепление иммунитета.",
-  },
-  {
-    id: 8,
-    name: "Детское парение",
-    duration: "10 мин",
-    price: 1200,
-    badge: "До 12 лет",
-    short: "Мягкий и лёгкий ритуал для детей: лёгкое парение дубовым и пихтовым вениками, ароматерапия и забота опытного пармастера.",
-    full: "Специальный мягкий ритуал для детей до 12 лет. Опытный пармастер бережно проведёт ребёнка в мир аромата и тепла. Лёгкое парение вениками (дубовым и пихтовым) безопасно для детей, ароматерапия и расслабление в парной зоне. Активизирует кровообращение, укрепляет иммунитет, улучшает сон и общий тонус организма.",
-  },
+  { id:1, name:"Фирменный пар",           duration:"50 мин", price:6200, badge:"Премиум",   emoji:"🌿",
+    short:"Парение в два захода с тёплыми припарками, медово-соляное скрабирование, ароматерапия луговыми травами.",
+    full:"Эта программа перенесёт вас на новый уровень блаженства, для настоящих ценителей! Согревающее парение с тёплыми припарками в два захода, ароматерапия луговыми травами, медово-соляное скрабирование и помывка берёзовым веником, либо лыковым мочалом." },
+  { id:2, name:"Цитрусовое парение",       duration:"35 мин", price:3900, badge:null,        emoji:"🍊",
+    short:"Будоражащий купаж пихты и цитруса, дуб для тела, завершающий пилинг сочным цитрусом.",
+    full:"Приготовьтесь к будоражащему ваше сознание сочетанию прохладной пихты и сочного цитруса, а могучий дуб не оставит ваше тело равнодушным. Лёгкий пилинг сочным цитрусом дополнит ваш купаж ощущением наполненности и настоящего расслабления." },
+  { id:3, name:"Бодрящее парение",         duration:"35 мин", price:3700, badge:"Хит",       emoji:"🌲",
+    short:"Авторский ритуал с хвоей пихты — прилив сил, ясность ума, оздоровление дыхательных путей.",
+    full:"Аромат живой пихты переносит в прохладу северной тайги, очищая мысли. Парение тела, ароматерапия ледяной пихтой, выход на контраст, чаепитие и догрев. Оздоровление дыхательных путей, улучшение кожи, снятие стресса и мощный прилив жизненного тонуса." },
+  { id:4, name:"Знахарь",                  duration:"20 мин", price:3200, badge:null,        emoji:"🌿",
+    short:"Эвкалипт для иммунитета под звонкий шелест дуба. Ингаляция, прогрев ног в настое эвкалипта.",
+    full:"Эвкалипт — лучший помощник для иммунитета! Насладитесь его благоуханием под звонкий шелест дуба. Парение всего тела, ингаляция эвкалиптом, прогрев ног в настое эвкалипта." },
+  { id:5, name:"Традиционное парение",     duration:"25 мин", price:3200, badge:null,        emoji:"🍃",
+    short:"Тёплый пар и нежная берёза. Прогрев дубовыми вениками и банная помывка берёзой.",
+    full:"Тёплый пар и нежная берёза окутывает ваше тело. Очищение тела и свобода мыслей. Лёгкий прогрев дубовыми вениками всего тела и банная помывка берёзой." },
+  { id:6, name:"Парение дубовыми вениками",duration:"15 мин", price:2500, badge:"Классика", emoji:"🌾",
+    short:"Прогрев каждой группы мышц всего тела с холодной пихтой на голове. Старая добрая классика.",
+    full:"Тёплое парение каждой группы мышц всего тела с холодной пихтой на голове, старая добрая классика." },
+  { id:7, name:"Мёд и травы",              duration:"20 мин", price:2800, badge:null,        emoji:"🍯",
+    short:"Глубокое парение, ароматерапия луговыми травами и скрабирование натуральным мёдом.",
+    full:"Парение подготавливает тело, в воздухе разливается благоухание луговых трав, а тёплый мёд создаёт атмосферу комфорта. Скрабирование натуральным мёдом делает кожу бархатистой и напитанной. Очищение, детокс, релакс и укрепление иммунитета." },
+  { id:8, name:"Детское парение",          duration:"10 мин", price:1200, badge:"До 12 лет", emoji:"🌸",
+    short:"Мягкий ритуал для детей: лёгкое парение дубовым и пихтовым вениками, ароматерапия, забота мастера.",
+    full:"Специальный мягкий ритуал для детей до 12 лет. Лёгкое парение дубовым и пихтовым вениками безопасно для детей. Ароматерапия и расслабление в парной. Активизирует кровообращение, укрепляет иммунитет, улучшает сон." },
 ];
 
 const INITIAL_REVIEWS = [
-  { id: 1, name: "Алексей", rating: 5, text: "Фирменный пар — это что-то невероятное! Вышел будто заново родился. Мастер — золотые руки.", date: "12 июня" },
-  { id: 2, name: "Марина", rating: 5, text: "Брала цитрусовое парение, аромат держался ещё пару дней. Кожа мягкая, настроение на высоте.", date: "8 июня" },
-  { id: 3, name: "Дмитрий", rating: 5, text: "Хожу на бодрящее парение каждую неделю. Лучшая перезагрузка после рабочих будней.", date: "3 июня" },
+  { id:1, name:"Алексей",  rating:5, text:"Фирменный пар — это что-то невероятное! Вышел будто заново родился. Мастер — золотые руки.", date:"12 июня" },
+  { id:2, name:"Марина",   rating:5, text:"Брала цитрусовое парение, аромат держался ещё пару дней. Кожа мягкая, настроение на высоте.", date:"8 июня" },
+  { id:3, name:"Дмитрий",  rating:5, text:"Хожу на бодрящее парение каждую неделю. Лучшая перезагрузка после рабочих будней.", date:"3 июня" },
 ];
 
 const TIP_OPTIONS = [300, 500, 1000, 2000];
 
+const STEAM_COUNT = 12;
+
+/* ---------- steam particles ---------- */
+function SteamLayer() {
+  const particles = Array.from({ length: STEAM_COUNT }, (_, i) => ({
+    left: `${5 + (i * 8) % 90}%`,
+    height: `${60 + Math.random() * 120}px`,
+    delay: `${(i * 0.7) % 6}s`,
+    duration: `${5 + (i * 1.3) % 6}s`,
+    drift: `${-30 + (i * 11) % 60}px`,
+  }));
+  return (
+    <div className="steam-wrap">
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          className="steam-p"
+          style={{
+            left: p.left,
+            height: p.height,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+            ["--drift" as string]: p.drift,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ---------- 3D tilt card ---------- */
+function Card3D({ children, className = "", style = {} }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    el.style.transform = `rotateY(${x * 12}deg) rotateX(${-y * 8}deg) translateY(-4px) scale(1.02)`;
+    el.style.boxShadow = `${-x*20}px ${y*20}px 50px rgba(0,0,0,0.45), 0 0 40px rgba(232,148,60,0.15)`;
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.transform = "";
+    el.style.boxShadow = "";
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className={`card-3d ${className}`}
+      style={{ transition: "transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s ease", ...style }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ========== main ========== */
 export default function Index() {
   const { toast } = useToast();
-  const [selected, setSelected] = useState<(typeof PROGRAMS)[0] | null>(null);
+  const [selected, setSelected] = useState<typeof PROGRAMS[0] | null>(null);
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
   const [revName, setRevName] = useState("");
   const [revText, setRevText] = useState("");
   const [revRating, setRevRating] = useState(5);
   const [tip, setTip] = useState<number | null>(null);
   const [customTip, setCustomTip] = useState("");
+  const [navScrolled, setNavScrolled] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setNavScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  const scroll = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   const submitReview = () => {
-    if (!revName.trim() || !revText.trim()) {
-      toast({ title: "Заполните имя и отзыв", variant: "destructive" });
-      return;
-    }
-    setReviews([
-      { id: Date.now(), name: revName, rating: revRating, text: revText, date: "сегодня" },
-      ...reviews,
-    ]);
-    setRevName("");
-    setRevText("");
-    setRevRating(5);
-    toast({ title: "Спасибо за отзыв! 🌿", description: "Ваш отзыв опубликован" });
+    if (!revName.trim() || !revText.trim()) { toast({ title: "Заполните имя и отзыв", variant: "destructive" }); return; }
+    setReviews([{ id: Date.now(), name: revName, rating: revRating, text: revText, date: "сегодня" }, ...reviews]);
+    setRevName(""); setRevText(""); setRevRating(5);
+    toast({ title: "Спасибо за отзыв! 🌿" });
   };
 
   const sendTip = () => {
     const amount = tip ?? Number(customTip);
-    if (!amount || amount < 1) {
-      toast({ title: "Выберите сумму чаевых", variant: "destructive" });
-      return;
-    }
-    toast({ title: `Спасибо за чаевые ${amount.toLocaleString()} ₽! 🙏`, description: "Пармастер благодарит вас" });
-    setTip(null);
-    setCustomTip("");
+    if (!amount) { toast({ title: "Выберите сумму", variant: "destructive" }); return; }
+    toast({ title: `Благодарность отправлена — ${amount.toLocaleString()} ₽ 🙏` });
+    setTip(null); setCustomTip("");
   };
 
-  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-
   return (
-    <div className="min-h-screen bg-background ember-bg relative overflow-x-hidden">
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-          <button onClick={() => scrollTo("top")} className="font-display font-bold text-lg uppercase tracking-wide">
-            <span className="text-white">Парм</span>
-            <span style={{ color: "hsl(var(--amber))" }}>астер</span>
-          </button>
-          <div className="hidden md:flex items-center gap-1">
-            {[
-              { id: "programs", label: "Программы" },
-              { id: "reviews", label: "Отзывы" },
-              { id: "tips", label: "Чаевые" },
-              { id: "contact", label: "Контакты" },
-            ].map((l) => (
-              <button
-                key={l.id}
-                onClick={() => scrollTo(l.id)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white/55 hover:text-[hsl(var(--amber))] transition-colors"
-              >
-                {l.label}
+    <div className="min-h-screen bg-background relative overflow-x-hidden grain">
+
+      {/* ambient orbs */}
+      <div className="fixed top-[-10vh] left-[-10vw] w-[60vw] h-[60vw] orb animate-pulse-glow pointer-events-none z-0"
+        style={{ background: "radial-gradient(circle, rgba(232,148,60,0.08) 0%, transparent 70%)" }} />
+      <div className="fixed bottom-[-15vh] right-[-10vw] w-[50vw] h-[50vw] orb pointer-events-none z-0"
+        style={{ background: "radial-gradient(circle, rgba(200,97,74,0.06) 0%, transparent 70%)" }} />
+
+      {/* ══ NAV ══ */}
+      <nav
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${navScrolled ? "glass border-b border-white/6 py-3" : "py-5 bg-transparent"}`}
+      >
+        <div className="max-w-6xl mx-auto px-5 flex items-center justify-between">
+          <span className="font-display font-bold text-xl tracking-widest uppercase">
+            <span className="text-white/80">Пар</span>
+            <span className="glow-gold">мастер</span>
+          </span>
+          <div className="hidden md:flex gap-1">
+            {[["programs","Программы"],["reviews","Отзывы"],["tips","Чаевые"],["contact","Контакт"]].map(([id,lbl])=>(
+              <button key={id} onClick={()=>scroll(id)} className="px-4 py-2 text-sm text-white/45 hover:text-[var(--gold)] transition-colors rounded-lg hover:bg-white/5">
+                {lbl}
               </button>
             ))}
           </div>
           <button
-            onClick={() => scrollTo("programs")}
-            className="px-4 py-2 rounded-lg text-sm font-bold text-[hsl(var(--primary-foreground))]"
-            style={{ background: "hsl(var(--amber))" }}
+            onClick={()=>scroll("programs")}
+            className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+            style={{ background: "var(--gold)", color: "hsl(var(--primary-foreground))", boxShadow: "0 0 20px rgba(232,148,60,0.35)" }}
           >
             Записаться
           </button>
         </div>
       </nav>
 
-      {/* HERO */}
-      <header id="top" className="relative min-h-screen flex items-center pt-16">
+      {/* ══ HERO ══ */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+        {/* bg image */}
         <div className="absolute inset-0">
-          <img src={HERO_IMG} alt="Парение" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
+          <img src={SMOKE_IMG} alt="" className="w-full h-full object-cover opacity-40" />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 0%, hsl(var(--background)) 75%)" }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--background))] via-transparent to-[hsl(var(--background))]" />
         </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full">
-          <div className="max-w-2xl animate-fade-in">
-            <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-6 border"
-              style={{ borderColor: "rgba(228,150,60,0.35)", color: "hsl(var(--amber))", background: "rgba(228,150,60,0.07)" }}
-            >
-              <Icon name="MapPin" size={13} />
-              Termoland · Краснодар
-            </div>
-            <h1 className="font-display font-bold text-5xl md:text-7xl uppercase leading-[0.95] mb-6 text-white">
-              Искусство
-              <br />
-              <span className="glow-text" style={{ color: "hsl(var(--amber))" }}>живого пара</span>
-            </h1>
-            <p className="font-script text-2xl md:text-3xl text-white/70 mb-3">
-              Авторские программы парения
-            </p>
-            <p className="text-white/55 text-lg leading-relaxed mb-8 max-w-lg">
-              8 уникальных ритуалов: от бодрящей хвои до медового скрабирования. Дубовые и берёзовые веники, луговые травы, забота мастера.
-            </p>
-            <div className="flex flex-wrap gap-3">
+
+        {/* steam */}
+        <SteamLayer />
+
+        {/* rotating ring */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-spin-slow opacity-10"
+          style={{ width:"700px", height:"700px", border:"1px solid var(--gold)", borderRadius:"50%", borderStyle:"dashed" }} />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-6"
+          style={{ width:"900px", height:"900px", border:"1px solid var(--gold)", borderRadius:"50%" }} />
+
+        {/* content */}
+        <div className="relative z-10 text-center px-5 max-w-5xl mx-auto animate-fade-in">
+          <p className="font-script text-2xl md:text-3xl mb-3" style={{ color: "var(--gold)", opacity: 0.85 }}>
+            Termoland · Краснодар
+          </p>
+
+          <h1 className="font-display font-bold uppercase leading-[0.88] mb-6">
+            <span className="block text-white" style={{ fontSize: "clamp(3rem,10vw,8rem)", letterSpacing:"-0.02em" }}>
+              Пармастер
+            </span>
+            <span className="block glow-gold" style={{ fontSize: "clamp(3rem,10vw,8rem)", letterSpacing:"-0.02em" }}>
+              Хилер
+            </span>
+            <span className="block text-white/30" style={{ fontSize: "clamp(3rem,10vw,8rem)", letterSpacing:"-0.02em" }}>
+              Практик
+            </span>
+          </h1>
+
+          <p className="text-white/50 text-lg md:text-xl max-w-xl mx-auto leading-relaxed mb-10">
+            Авторские программы парения · 8 ритуалов<br/>Живые веники, натуральные травы, мастерство
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Card3D>
               <button
-                onClick={() => scrollTo("programs")}
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-105"
-                style={{ background: "hsl(var(--amber))", boxShadow: "0 0 30px rgba(228,150,60,0.3)" }}
+                onClick={()=>scroll("programs")}
+                className="px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-2 transition-colors"
+                style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.4)" }}
               >
-                Выбрать программу
-                <Icon name="ArrowDown" size={18} />
+                Программы парения
+                <Icon name="ArrowDown" size={20} />
               </button>
+            </Card3D>
+            <Card3D>
               <button
-                onClick={() => scrollTo("tips")}
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-white glass border border-white/10 hover:border-[hsl(var(--amber))] transition-all"
+                onClick={()=>scroll("tips")}
+                className="px-8 py-4 rounded-2xl font-bold text-lg text-white glass flex items-center gap-2"
+                style={{ border:"1px solid rgba(232,148,60,0.3)" }}
               >
-                <Icon name="Heart" size={18} />
+                <Icon name="Heart" size={20} />
                 Чаевые мастеру
               </button>
-            </div>
+            </Card3D>
           </div>
         </div>
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/30 animate-float">
-          <Icon name="ChevronDown" size={26} />
-        </div>
-      </header>
 
-      {/* PROGRAMS */}
-      <section id="programs" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="font-script text-2xl mb-2" style={{ color: "hsl(var(--amber))" }}>8 вариантов парения</div>
-          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white">Программы</h2>
+        {/* scroll hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/25 animate-float">
+          <Icon name="ChevronDown" size={28} />
+        </div>
+      </section>
+
+      {/* ══ ПРОГРАММЫ ══ */}
+      <section id="programs" className="relative py-24 px-5 max-w-6xl mx-auto">
+
+        {/* section header */}
+        <div className="text-center mb-16">
+          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>8 вариантов</p>
+          <h2 className="font-display font-bold uppercase text-white" style={{ fontSize:"clamp(2.5rem,6vw,5rem)", letterSpacing:"-0.02em" }}>
+            Программы парения
+          </h2>
+          <div className="mt-4 h-px w-24 mx-auto" style={{ background:"linear-gradient(to right, transparent, var(--gold), transparent)" }} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {PROGRAMS.map((p, i) => (
-            <div
+            <Card3D
               key={p.id}
-              className="rounded-2xl border border-white/5 p-6 hover-glow cursor-pointer animate-slide-up flex flex-col"
-              style={{ animationDelay: `${i * 0.06}s`, background: "hsl(var(--card))" }}
-              onClick={() => setSelected(p)}
+              className="rounded-2xl border border-white/6 cursor-pointer animate-slide-up overflow-hidden"
+              style={{ animationDelay:`${i*0.08}s`, background:"hsl(var(--card))" }}
             >
-              <div className="flex items-start justify-between mb-3 gap-3">
-                <h3 className="font-display font-semibold text-2xl text-white">{p.name}</h3>
-                {p.badge && (
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-bold shrink-0"
-                    style={{ background: "rgba(228,150,60,0.12)", color: "hsl(var(--amber))" }}
-                  >
-                    {p.badge}
-                  </span>
-                )}
-              </div>
-              <p className="text-white/50 text-sm leading-relaxed mb-5 flex-1">{p.short}</p>
-              <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                <div className="flex items-center gap-2 text-white/45 text-sm">
-                  <Icon name="Clock" size={15} />
-                  {p.duration}
+              <div onClick={()=>setSelected(p)} className="p-6 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-3 gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{p.emoji}</span>
+                    <h3 className="font-display font-semibold text-xl text-white">{p.name}</h3>
+                  </div>
+                  {p.badge && (
+                    <span className="px-3 py-1 rounded-full text-xs font-bold shrink-0"
+                      style={{ background:"rgba(232,148,60,0.1)", color:"var(--gold)", border:"1px solid rgba(232,148,60,0.25)" }}>
+                      {p.badge}
+                    </span>
+                  )}
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="font-display font-bold text-2xl text-white">{p.price.toLocaleString()} ₽</span>
-                  <span className="text-[hsl(var(--amber))] text-sm font-medium flex items-center gap-1">
-                    Подробнее <Icon name="ArrowRight" size={14} />
+
+                <p className="text-white/45 text-sm leading-relaxed flex-1 mb-5">{p.short}</p>
+
+                <div className="flex items-center justify-between pt-4 border-t border-white/6">
+                  <span className="flex items-center gap-1.5 text-white/40 text-sm">
+                    <Icon name="Clock" size={14} />{p.duration}
                   </span>
+                  <div className="flex items-center gap-4">
+                    <span className="font-display font-bold text-2xl text-white">{p.price.toLocaleString()} ₽</span>
+                    <span className="text-sm font-medium flex items-center gap-1" style={{ color:"var(--gold)" }}>
+                      Детали <Icon name="ArrowRight" size={14} />
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Card3D>
           ))}
         </div>
-        <p className="text-center text-white/30 text-sm mt-8">
-          Парение рассчитано на одного человека · Необходима предварительная запись · Не входит в стоимость билета
+
+        <p className="text-center text-white/25 text-xs mt-8">
+          Рассчитано на одного · Необходима предварительная запись · Оплачивается отдельно от билета
         </p>
       </section>
 
-      {/* MASTER */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto glass rounded-3xl border border-white/5 overflow-hidden grid md:grid-cols-2">
-          <div className="h-72 md:h-auto">
-            <img src={MASTER_IMG} alt="Пармастер" className="w-full h-full object-cover" />
-          </div>
-          <div className="p-8 md:p-10 flex flex-col justify-center">
-            <div className="font-script text-2xl mb-1" style={{ color: "hsl(var(--amber))" }}>Ваш пармастер</div>
-            <h3 className="font-display font-bold text-3xl text-white mb-4 uppercase">Мастер живого пара</h3>
-            <p className="text-white/55 leading-relaxed mb-6">
-              Более 10 лет искусства парения. Чувствую тело, температуру и настроение каждого гостя. Использую только натуральные веники, травы и масла — никакой суеты, только глубокий релакс и забота.
-            </p>
-            <div className="flex gap-6">
-              {[
-                { v: "10+", l: "лет опыта" },
-                { v: "5 000+", l: "гостей" },
-                { v: "4.9", l: "рейтинг" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <div className="font-display font-bold text-2xl" style={{ color: "hsl(var(--amber))" }}>{s.v}</div>
-                  <div className="text-white/40 text-xs">{s.l}</div>
+      {/* ══ МАСТЕР ══ */}
+      <section className="py-20 px-5">
+        <div className="max-w-5xl mx-auto">
+          <Card3D
+            className="rounded-3xl overflow-hidden border border-white/6"
+            style={{ background:"hsl(var(--card))" }}
+          >
+            <div className="grid md:grid-cols-2">
+              <div className="relative h-80 md:h-auto overflow-hidden">
+                <img src={MASTER_IMG} alt="Пармастер" className="w-full h-full object-cover" />
+                <div className="absolute inset-0" style={{ background:"linear-gradient(to right, transparent 60%, hsl(var(--card)))" }} />
+                {/* floating badge */}
+                <div className="absolute bottom-5 left-5 px-4 py-2 rounded-xl glass border border-white/10">
+                  <span className="font-script text-xl" style={{ color:"var(--gold)" }}>Мастер живого пара</span>
                 </div>
-              ))}
+              </div>
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Ваш целитель</p>
+                <h3 className="font-display font-bold uppercase text-white text-4xl mb-5 leading-none">
+                  Пармастер<br/>
+                  <span className="glow-gold">Хилер</span>
+                </h3>
+                <p className="text-white/50 leading-relaxed mb-7 text-sm">
+                  Более 10 лет практики. Чувствую тело, температуру и состояние каждого гостя. Только натуральные веники, живые травы и масла. Парение — это не процедура, это ритуал исцеления.
+                </p>
+                <div className="grid grid-cols-3 gap-4">
+                  {[["10+","лет практики"],["5 000+","гостей"],["4.9★","рейтинг"]].map(([v,l])=>(
+                    <div key={l} className="glass rounded-xl p-3 text-center border border-white/5">
+                      <div className="font-display font-bold text-xl glow-gold">{v}</div>
+                      <div className="text-white/35 text-xs mt-1">{l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          </Card3D>
         </div>
       </section>
 
-      {/* REVIEWS */}
-      <section id="reviews" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="font-script text-2xl mb-2" style={{ color: "hsl(var(--amber))" }}>Что говорят гости</div>
-          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white">Отзывы</h2>
+      {/* ══ ОТЗЫВЫ ══ */}
+      <section id="reviews" className="py-20 px-5 max-w-5xl mx-auto">
+        <div className="text-center mb-14">
+          <p className="font-script text-2xl mb-2" style={{ color:"var(--gold)" }}>Голос гостей</p>
+          <h2 className="font-display font-bold uppercase text-white" style={{ fontSize:"clamp(2.5rem,6vw,4.5rem)", letterSpacing:"-0.02em" }}>
+            Отзывы
+          </h2>
+          <div className="mt-4 h-px w-24 mx-auto" style={{ background:"linear-gradient(to right, transparent, var(--gold), transparent)" }} />
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 mb-10">
-          {reviews.map((r) => (
-            <div key={r.id} className="rounded-2xl border border-white/5 p-5 animate-fade-in" style={{ background: "hsl(var(--card))" }}>
+          {reviews.map((r, i)=>(
+            <Card3D key={r.id}
+              className="rounded-2xl border border-white/6 p-5 animate-slide-up"
+              style={{ animationDelay:`${i*0.1}s`, background:"hsl(var(--card))" }}
+            >
               <div className="flex items-center gap-3 mb-3">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-[hsl(var(--primary-foreground))]"
-                  style={{ background: "hsl(var(--amber))" }}
-                >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+                  style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))" }}>
                   {r.name[0]}
                 </div>
                 <div>
                   <div className="text-white font-medium text-sm">{r.name}</div>
-                  <div className="text-white/35 text-xs">{r.date}</div>
+                  <div className="text-white/30 text-xs">{r.date}</div>
                 </div>
               </div>
-              <div className="flex gap-0.5 mb-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Icon key={i} name="Star" size={14} className={i < r.rating ? "text-[hsl(var(--amber))]" : "text-white/15"} />
+              <div className="flex gap-0.5 mb-3">
+                {Array.from({length:5}).map((_,j)=>(
+                  <Icon key={j} name="Star" size={14} className={j < r.rating ? "" : "text-white/15"}
+                    style={j < r.rating ? { color:"var(--gold)" } : {}} />
                 ))}
               </div>
-              <p className="text-white/55 text-sm leading-relaxed">{r.text}</p>
-            </div>
+              <p className="text-white/50 text-sm leading-relaxed">{r.text}</p>
+            </Card3D>
           ))}
         </div>
 
-        {/* Review form */}
-        <div className="glass rounded-2xl border border-white/5 p-6 md:p-8 max-w-2xl mx-auto">
-          <h3 className="font-display font-semibold text-xl text-white mb-5">Оставить отзыв</h3>
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-white/45 text-sm mr-2">Оценка:</span>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <button key={i} onClick={() => setRevRating(i + 1)} className="transition-transform hover:scale-125">
-                <Icon name="Star" size={26} className={i < revRating ? "text-[hsl(var(--amber))]" : "text-white/20"} />
+        {/* form */}
+        <Card3D className="rounded-2xl border border-white/6 p-6 md:p-8 max-w-2xl mx-auto"
+          style={{ background:"hsl(var(--card))" }}>
+          <h3 className="font-display font-semibold text-2xl text-white mb-5 uppercase">Оставить отзыв</h3>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-white/40 text-sm">Оценка:</span>
+            {Array.from({length:5}).map((_,i)=>(
+              <button key={i} onClick={()=>setRevRating(i+1)} className="transition-transform hover:scale-125">
+                <Icon name="Star" size={28} style={i < revRating ? { color:"var(--gold)" } : { color:"rgba(255,255,255,0.15)" }} />
               </button>
             ))}
           </div>
-          <input
-            value={revName}
-            onChange={(e) => setRevName(e.target.value)}
-            placeholder="Ваше имя"
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors mb-3"
+          <input value={revName} onChange={e=>setRevName(e.target.value)} placeholder="Ваше имя"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none transition-colors mb-3"
+            style={{ ["--tw-ring-color" as string]:"var(--gold)" }}
+            onFocus={e=>(e.target.style.borderColor="var(--gold)")}
+            onBlur={e=>(e.target.style.borderColor="")}
           />
-          <textarea
-            value={revText}
-            onChange={(e) => setRevText(e.target.value)}
-            placeholder="Поделитесь впечатлениями о парении..."
-            rows={3}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors resize-none mb-4"
+          <textarea value={revText} onChange={e=>setRevText(e.target.value)} placeholder="Поделитесь впечатлениями..." rows={3}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none resize-none mb-4 transition-colors"
+            onFocus={e=>(e.target.style.borderColor="var(--gold)")}
+            onBlur={e=>(e.target.style.borderColor="")}
           />
-          <button
-            onClick={submitReview}
-            className="w-full py-3.5 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-[1.02]"
-            style={{ background: "hsl(var(--amber))" }}
-          >
+          <button onClick={submitReview}
+            className="w-full py-3.5 rounded-xl font-bold text-base transition-all hover:scale-[1.02]"
+            style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 20px rgba(232,148,60,0.25)" }}>
             Опубликовать отзыв
           </button>
-        </div>
+        </Card3D>
       </section>
 
-      {/* TIPS */}
-      <section id="tips" className="py-20 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="text-5xl mb-4">🙏</div>
-          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase text-white mb-3">Чаевые мастеру</h2>
-          <p className="text-white/50 mb-8">
-            Понравилось парение? Поблагодарите пармастера — это лучшая мотивация дарить тепло и заботу.
+      {/* ══ ЧАЕВЫЕ ══ */}
+      <section id="tips" className="py-20 px-5 relative overflow-hidden">
+        {/* decorative ring behind */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-5 animate-spin-slow"
+          style={{ width:"600px", height:"600px", border:"1px dashed var(--gold)", borderRadius:"50%" }} />
+
+        <div className="max-w-xl mx-auto text-center relative z-10">
+          <div className="text-6xl mb-5 animate-float">🙏</div>
+          <h2 className="font-display font-bold uppercase text-white mb-2" style={{ fontSize:"clamp(2.2rem,6vw,4.5rem)", letterSpacing:"-0.02em" }}>
+            Чаевые мастеру
+          </h2>
+          <p className="text-white/45 mb-10 text-lg">
+            Понравилось парение? Поблагодарите мастера — это лучшая энергия для продолжения практики.
           </p>
 
-          <div className="glass rounded-2xl border border-white/5 p-6 md:p-8">
-            <div className="grid grid-cols-4 gap-3 mb-4">
-              {TIP_OPTIONS.map((amount) => (
-                <button
-                  key={amount}
-                  onClick={() => { setTip(amount); setCustomTip(""); }}
-                  className={`py-4 rounded-xl font-display font-bold text-lg transition-all ${
-                    tip === amount ? "text-[hsl(var(--primary-foreground))] scale-105" : "text-white bg-white/5 hover:bg-white/10"
-                  }`}
-                  style={tip === amount ? { background: "hsl(var(--amber))" } : {}}
-                >
+          <Card3D className="glass-gold rounded-3xl p-7 md:p-9">
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {TIP_OPTIONS.map(amount=>(
+                <button key={amount} onClick={()=>{ setTip(amount); setCustomTip(""); }}
+                  className="py-5 rounded-2xl font-display font-bold text-2xl transition-all hover:scale-105"
+                  style={tip===amount
+                    ? { background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 25px rgba(232,148,60,0.4)" }
+                    : { background:"rgba(255,255,255,0.04)", color:"white", border:"1px solid rgba(255,255,255,0.08)" }
+                  }>
                   {amount} ₽
                 </button>
               ))}
             </div>
-            <input
-              value={customTip}
-              onChange={(e) => { setCustomTip(e.target.value.replace(/\D/g, "")); setTip(null); }}
-              placeholder="Своя сумма, ₽"
-              inputMode="numeric"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-center placeholder-white/30 focus:outline-none focus:border-[hsl(var(--amber))] transition-colors mb-4"
+            <input value={customTip} onChange={e=>{ setCustomTip(e.target.value.replace(/\D/g,"")); setTip(null); }}
+              placeholder="Своя сумма, ₽" inputMode="numeric"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3.5 text-white text-center text-lg placeholder-white/25 focus:outline-none mb-4 transition-colors"
+              onFocus={e=>(e.target.style.borderColor="var(--gold)")}
+              onBlur={e=>(e.target.style.borderColor="")}
             />
-            <button
-              onClick={sendTip}
-              className="w-full py-4 rounded-xl font-bold text-[hsl(var(--primary-foreground))] text-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-              style={{ background: "hsl(var(--amber))", boxShadow: "0 0 30px rgba(228,150,60,0.3)" }}
-            >
-              <Icon name="Heart" size={20} />
+            <button onClick={sendTip}
+              className="w-full py-4.5 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}>
+              <Icon name="Heart" size={22} />
               Поблагодарить мастера
             </button>
-          </div>
+          </Card3D>
         </div>
       </section>
 
-      {/* CONTACT / FOOTER */}
-      <footer id="contact" className="py-16 px-4 sm:px-6 border-t border-white/5">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
+      {/* ══ FOOTER ══ */}
+      <footer id="contact" className="py-16 px-5 border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 mb-10">
           <div>
-            <div className="font-display font-bold text-xl uppercase mb-3">
-              <span className="text-white">Парм</span>
-              <span style={{ color: "hsl(var(--amber))" }}>астер</span>
+            <div className="font-display font-bold text-2xl uppercase mb-3">
+              <span className="text-white/70">Парм</span>
+              <span className="glow-gold">астер</span>
             </div>
-            <p className="text-white/40 text-sm leading-relaxed">
-              Авторские программы парения в термальном комплексе Termoland Краснодар.
+            <p className="text-white/35 text-sm leading-relaxed">
+              Авторские программы парения в термальном комплексе Termoland Краснодар
             </p>
           </div>
           {[
-            { icon: "MapPin", label: "Адрес", value: "Termoland, Краснодар" },
-            { icon: "Phone", label: "Запись", value: "+7 (861) 000-00-00" },
-          ].map((c) => (
+            { icon:"MapPin", label:"Адрес", value:"Termoland, Краснодар" },
+            { icon:"Phone",  label:"Запись", value:"+7 (861) 000-00-00" },
+          ].map(c=>(
             <div key={c.label} className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(228,150,60,0.1)" }}>
-                <Icon name={c.icon as "MapPin"} size={18} className="text-[hsl(var(--amber))]" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background:"rgba(232,148,60,0.1)", border:"1px solid rgba(232,148,60,0.2)" }}>
+                <Icon name={c.icon as "MapPin"} size={18} style={{ color:"var(--gold)" }} />
               </div>
               <div>
-                <div className="text-white/40 text-xs">{c.label}</div>
+                <div className="text-white/35 text-xs">{c.label}</div>
                 <div className="text-white font-medium">{c.value}</div>
               </div>
             </div>
           ))}
         </div>
-        <div className="max-w-5xl mx-auto mt-10 pt-6 border-t border-white/5 text-center text-white/25 text-xs">
-          © 2026 Пармастер · Termoland Краснодар · Сделано с теплом
+        <div className="max-w-5xl mx-auto pt-6 border-t border-white/5 text-center text-white/20 text-xs">
+          © 2026 Пармастер · Хилер · Практик · Termoland Краснодар
         </div>
       </footer>
 
-      {/* PROGRAM MODAL */}
+      {/* ══ МОДАЛКА ПРОГРАММЫ ══ */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4" onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4"
+          onClick={()=>setSelected(null)}>
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-md" />
           <div
-            className="relative w-full md:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/5 p-7 animate-slide-up"
-            style={{ background: "hsl(var(--card))" }}
-            onClick={(e) => e.stopPropagation()}
+            className="relative w-full md:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl md:rounded-2xl border border-white/8 p-7 animate-slide-up"
+            style={{ background:"hsl(var(--card))" }}
+            onClick={e=>e.stopPropagation()}
           >
-            <button
-              onClick={() => setSelected(null)}
-              className="absolute top-5 right-5 w-9 h-9 rounded-xl glass flex items-center justify-center text-white/60 hover:text-white"
-            >
+            <button onClick={()=>setSelected(null)}
+              className="absolute top-5 right-5 w-9 h-9 rounded-xl glass flex items-center justify-center text-white/50 hover:text-white transition-colors">
               <Icon name="X" size={18} />
             </button>
-            {selected.badge && (
-              <span className="px-3 py-1 rounded-full text-xs font-bold inline-block mb-3" style={{ background: "rgba(228,150,60,0.12)", color: "hsl(var(--amber))" }}>
-                {selected.badge}
-              </span>
-            )}
-            <h2 className="font-display font-bold text-3xl text-white mb-3 pr-10">{selected.name}</h2>
-            <div className="flex items-center gap-2 text-white/45 text-sm mb-5">
-              <Icon name="Clock" size={15} />
-              Длительность: {selected.duration}
+
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-4xl">{selected.emoji}</span>
+              {selected.badge && (
+                <span className="px-3 py-1 rounded-full text-xs font-bold"
+                  style={{ background:"rgba(232,148,60,0.1)", color:"var(--gold)", border:"1px solid rgba(232,148,60,0.25)" }}>
+                  {selected.badge}
+                </span>
+              )}
             </div>
-            <p className="text-white/60 leading-relaxed mb-6">{selected.full}</p>
-            <div className="rounded-xl p-4 mb-6 text-sm text-white/45 leading-relaxed" style={{ background: "rgba(255,255,255,0.03)" }}>
-              <p>• Парение рассчитано на одного человека.</p>
-              <p>• Необходима предварительная запись.</p>
-              <p>• Не входит в стоимость билета, оплачивается отдельно.</p>
+            <h2 className="font-display font-bold text-3xl text-white mb-2 pr-10">{selected.name}</h2>
+            <p className="text-white/40 text-sm mb-5 flex items-center gap-1.5">
+              <Icon name="Clock" size={14} /> Длительность: {selected.duration}
+            </p>
+            <p className="text-white/60 leading-relaxed mb-6 text-sm">{selected.full}</p>
+            <div className="rounded-xl p-4 mb-6 text-xs text-white/35 leading-relaxed space-y-1"
+              style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)" }}>
+              <p>• Парение рассчитано на одного человека</p>
+              <p>• Необходима предварительная запись</p>
+              <p>• Не входит в стоимость билета</p>
             </div>
-            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+            <div className="flex items-center justify-between pt-4 border-t border-white/6">
               <span className="font-display font-bold text-3xl text-white">{selected.price.toLocaleString()} ₽</span>
               <button
-                onClick={() => { toast({ title: "Заявка принята 🌿", description: `${selected.name} — с вами свяжутся для записи` }); setSelected(null); }}
-                className="px-7 py-3.5 rounded-xl font-bold text-[hsl(var(--primary-foreground))] transition-all hover:scale-105"
-                style={{ background: "hsl(var(--amber))", boxShadow: "0 0 20px rgba(228,150,60,0.35)" }}
-              >
+                onClick={()=>{ toast({ title:"Заявка принята 🌿", description:`${selected.name} — с вами свяжутся для записи` }); setSelected(null); }}
+                className="px-7 py-3.5 rounded-xl font-bold transition-all hover:scale-105"
+                style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 25px rgba(232,148,60,0.35)" }}>
                 Записаться
               </button>
             </div>
