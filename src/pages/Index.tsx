@@ -482,7 +482,7 @@ export default function Index() {
 
               {/* СБП */}
               <a
-                href={`https://qr.nspk.ru/AS10004RV4OLJ3E5IT40BTMQTCTQK33J?type=01&bank=100000000111&sum=${(tip ?? Number(customTip) || 300) * 100}&cur=RUB&crc=6B7A`}
+                href={`https://qr.nspk.ru/AS10004RV4OLJ3E5IT40BTMQTCTQK33J?type=01&bank=100000000111&sum=${((tip !== null ? tip : Number(customTip) || 300)) * 100}&cur=RUB&crc=6B7A`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
