@@ -467,18 +467,32 @@ export default function Index() {
               <div className="text-white/35 text-xs">Нажмите на номер — скопируется автоматически</div>
             </div>
 
-            <a
-              href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip ?? (customTip || 300)}&trncard=2202208025878902`}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-              style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}
-            >
-              <Icon name="Heart" size={22} />
-              Поблагодарить мастера
-            </a>
+            {/* кнопки перевода */}
+            <div className="flex flex-col gap-3">
+              <a
+                href={`https://www.sberbank.com/ru/person/dl/jc?action=transfer&trnsum=${tip ?? (customTip || 300)}&trncard=2202208025878902`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                style={{ background:"var(--gold)", color:"hsl(var(--primary-foreground))", boxShadow:"0 0 40px rgba(232,148,60,0.35)" }}
+              >
+                <Icon name="Heart" size={22} />
+                Поблагодарить · Сбербанк
+              </a>
+
+              {/* СБП */}
+              <a
+                href={`https://qr.nspk.ru/AS10004RV4OLJ3E5IT40BTMQTCTQK33J?type=01&bank=100000000111&sum=${(tip ?? Number(customTip) || 300) * 100}&cur=RUB&crc=6B7A`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] glass border border-white/10 text-white hover:border-[var(--gold)]"
+              >
+                <span className="text-xl">⚡</span>
+                Перевести через СБП
+              </a>
+            </div>
             <p className="text-white/25 text-xs text-center mt-3">
-              Откроется Сбербанк Онлайн с уже заполненной суммой
+              СБП — мгновенный перевод через любой банк по номеру телефона
             </p>
           </Card3D>
         </div>
